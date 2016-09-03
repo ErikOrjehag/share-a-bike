@@ -4,20 +4,17 @@ var app = angular.module('app', ['ngRoute']);
 app.config(function ($routeProvider, $locationProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'partials/home.html'/*,
-       controller: 'queueCtrl'*/
+      templateUrl: 'partials/home.html',
+       controller: 'homeCtrl'
     })
-    .when('/share', {
-      templateUrl: 'partials/share.html'/*,
-      controller: 'queueCtrl'*/
+    .when('/find', {
+      templateUrl: 'partials/find.html'
     })
     .when('/profile', {
-      templateUrl: 'partials/profile.html'/*,
-      controller: 'queueCtrl'*/
+      templateUrl: 'partials/profile.html'
     })
     .when('/user/:id', {
-      templateUrl: 'partials/user.html'/*,
-       controller: 'queueCtrl'*/
+      templateUrl: 'partials/user.html'
     })
     .otherwise({
       redirectTo: '/'
