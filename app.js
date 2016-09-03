@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', require("./api/index"));
 
-app.get(["/", "/profile", "/find", "/user/:id"], function(req, res) {
+app.get(["/", "/profile", "/find", "/user/:id", "/bike/:id"], function(req, res) {
   res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 

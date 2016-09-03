@@ -7,8 +7,18 @@
     <div class="right-column">
       <div class="bike-list">
         <div class="bike-list-row" ng-repeat="bike in bikes">
-          <img ng-src="bike.image_url">
-          {{ bike.bike_name }}
+          <table>
+            <tr>
+              <td style="width: 0;">
+                <div class="bike-list-image" ng-style="{ 'background-image': 'url({{bike.image_url}})' }"></div>
+              </td>
+              <td style="padding-left: 10px;">
+                <div class="bike-list-name">{{ bike.bike_name }}</div>
+                <div class="button">Låna</div>
+                <div class="button">Lämna tillbaka</div>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
       <div class="clear"></div>

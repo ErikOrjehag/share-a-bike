@@ -17,6 +17,10 @@ app.config(function ($routeProvider, $locationProvider) {
     .when('/user/:id', {
       templateUrl: 'partials/user.html'
     })
+    .when('/bike/:id', {
+      templateUrl: 'partials/bike.html',
+      controller: 'bikeCtrl'
+    })
     .otherwise({
       redirectTo: '/'
     });

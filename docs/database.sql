@@ -53,3 +53,4 @@ INSERT INTO users (email, full_name, profile_text, rating, image_url) VALUES ('w
 INSERT INTO bikes (bike_name, image_url, owner) VALUES ('Skruttis', '', 1), ('Blå racketen', '', 1);
 INSERT INTO bike_positions (pos, bike_id) VALUES (ST_GeomFromText('POINT(58.394156 15.561379)'), 1), (ST_GeomFromText('POINT(58.395967 15.563529)'), 2);
 INSERT INTO bike_positions (pos, bike_id) VALUES (ST_GeomFromText('POINT(58.394353 15.561931)'), 1), (ST_GeomFromText('POINT(58.397439 15.562656)'), 2);
+INSERT INTO rentals (bike_id, by_user_id) VALUES (1, 1);
