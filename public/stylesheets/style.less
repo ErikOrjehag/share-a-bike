@@ -137,11 +137,33 @@ input {
 .left-column {
   width: 60%;
   float: left;
-  background: red;
 }
 
 .right-column {
-  width: 60%;
+  width: 40%;
   float: left;
-  background: blue;
+  padding: 0 @spacing;
+}
+
+.bike-list-row {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: @spacing * 4 0;
+
+  &:last-child {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .bike-list-image {
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+    background-position: center center;
+    background-size: cover;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .bike-list-name {
+    margin-bottom: @spacing;
+  }
 }
