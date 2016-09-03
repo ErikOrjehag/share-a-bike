@@ -23,12 +23,32 @@ router.get("/user/:id", function (req, res) {
 router.get("/bike/:id", function (req, res) {
   pool.connect(function(error, client, done) {
     if (error) return console.log(error);
-    client.query('SELECT * FROM bikes WHERE id = $1', [req.params.id], function(error, result) {
+    client.query('SELECT * FROM bikes WHERE id = $1', [req.params.id], function(error, bikes) {
       done();
 
       if (error) return console.log(error);
 
-      res.json(result.rows[0]);
+      client.query('SELECT id, bike_id, ts, ST_X(pos) AS lat, ST_Y(pos) AS lon FROM bike_positions ORDER BY bike_id, ts DESC', function(error, positions) {
+        done();
+
+        if (error) return console.log(error);
+
+        var pos = positions.rows.reduce(function (prev, position) {
+          var bike_id = position.bike_id;
+          if (!prev[bike_id]) {
+            prev[bike_id] = [];
+          }
+          prev[bike_id].push(position);
+          return prev;
+        }, {});
+
+        var result = bikes.rows.map(function (bike) {
+          bike["positions"] = pos[bike.id];
+          return bike;
+        });
+
+        res.json(result[0]);
+      });
     });
   });
 });
@@ -37,7 +57,7 @@ router.get("/bikes", function (req, res) {
   pool.connect(function(error, client, done) {
     if (error) return console.log(error);
 
-    client.query('SELECT * FROM bikes', function(error, bikes) {
+    client.query('SELECT bikes.id, bikes.bike_name, bikes.image_url, bikes.owner, bikes.electron_id, bikes.locked, bikes.moved, bikes.online, bikes.rented_by, users.full_name FROM bikes LEFT JOIN users ON bikes.owner = users.id ORDER BY bikes.id DESC;', function(error, bikes) {
       if (error) return console.log(error);
 
       client.query('SELECT id, bike_id, ts, ST_X(pos) AS lat, ST_Y(pos) AS lon FROM bike_positions ORDER BY bike_id, ts DESC', function(error, positions) {

@@ -20,7 +20,7 @@ app.factory("loginFactory", function ($rootScope, $location, $http) {
   };
 
   fac.getUserId = function () {
-    return sessionStorage.getItem("user_id");
+    return parseInt(sessionStorage.getItem("user_id"));
   };
 
   return fac;

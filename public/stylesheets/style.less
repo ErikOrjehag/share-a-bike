@@ -29,6 +29,7 @@ menu {
   margin: 0;
   position: fixed;
   width: 100%;
+  z-index: 100;
 
   .button {
     float: right;
@@ -110,6 +111,14 @@ input {
   border-radius: @radius;
   padding: @spacing;
   cursor: pointer;
+
+  &.gray {
+    cursor: not-allowed;
+    pointer-events: all !important;
+    color: #666;
+    background: #ccc;
+    border: 1px solid #bbb;
+  }
 }
 
 .login-form {
@@ -124,7 +133,7 @@ input {
 }
 
 .find-map {
-  height: 500px;
+  height: 800px;
   width: 100%;
   border-radius: @radius;
   box-shadow: 0 2px 1px rgba(0,0,0,0.1);
@@ -147,7 +156,7 @@ input {
 
 .bike-list-row {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding: @spacing * 4 0;
+  padding: @spacing * 2 0;
 
   &:last-child {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -165,5 +174,13 @@ input {
 
   .bike-list-name {
     margin-bottom: @spacing;
+  }
+
+  .bike-info-td {
+    padding-left: @spacing * 2;
+  }
+
+  .button {
+    margin-top: -@spacing;
   }
 }

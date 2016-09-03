@@ -7,15 +7,23 @@
     <div class="right-column">
       <div class="bike-list">
         <div class="bike-list-row" ng-repeat="bike in bikes">
-          <table>
+          <table style="width: 100%;">
             <tr>
-              <td style="width: 0;">
+              <td style="width: 1px;">
                 <div class="bike-list-image" ng-style="{ 'background-image': 'url({{bike.image_url}})' }"></div>
               </td>
-              <td style="padding-left: 10px;">
-                <div class="bike-list-name">{{ bike.bike_name }}</div>
-                <div class="button">Låna</div>
-                <div class="button">Lämna tillbaka</div>
+              <td class="bike-info-td" valign="top">
+                <div style="float: left;" class="bike-list-name">{{ bike.bike_name }}</div>
+                <div style="float: right">
+                  <span style="color: #aaa;" ng-show="shouldShowNotAvailable(bike)">Upptagen</span>
+                  <div class="button" ng-show="shouldShowRentBike(bike)" ng-click="rent(bike)">Låna</div>
+                  <div class="button gray" ng-show="shouldShowGrayRentBike(bike)" title="Du måste lämna tillbaka din hyra cykel innan du hyr en annan.">Låna</div>
+                  <div class="button" ng-show="shouldShowReturnBike(bike)" ng-click="return(bike)">Lämna tillbaka</div>
+                </div>
+                <div class="clear"></div>
+                <div style="font-style: italic">
+                  Ägare: {{ bike.full_name }}
+                </div>
               </td>
             </tr>
           </table>
