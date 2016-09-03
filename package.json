@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=80 nodemon bin/www"
+    "start": "PORT=80 nodemon bin/www >> ~/log.txt 2>&1"
   },
   "dependencies": {
     "body-parser": "~1.15.1",

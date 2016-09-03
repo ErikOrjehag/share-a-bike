@@ -43,7 +43,7 @@ router.get("/bikes", function (req, res) {
     client.query('SELECT * FROM bikes', function(error, bikes) {
       if (error) return console.log(error);
 
-      client.query('SELECT * FROM bike_positions ORDER BY bike_id, ts DESC', function(error, positions) {
+      client.query('SELECT id, bike_id, ts, ST_X(pos) AS lat, ST_Y(pos) AS lon FROM bike_positions ORDER BY bike_id, ts DESC', function(error, positions) {
         done();
 
         if (error) return console.log(error);

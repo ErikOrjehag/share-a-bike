@@ -4,8 +4,8 @@ var app = angular.module('app', ['ngRoute']);
 app.config(function ($routeProvider, $locationProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'partials/home.html'/*,
-       controller: 'queueCtrl'*/
+      templateUrl: 'partials/home.html',
+       controller: 'homeCtrl'
     })
     .when('/share', {
       templateUrl: 'partials/share.html'/*,
