@@ -1,4 +1,9 @@
 
+-- psql -U postgres
+-- \connect bike
+-- \d+
+-- \d+ bikes
+
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(100),
@@ -15,6 +20,9 @@ CREATE TABLE bikes (
   electron_id VARCHAR(100),
   owner INT REFERENCES users(id)
 );
+
+ALTER TABLE bikes ADD COLUMN stolen BOOLEAN DEFAULT FALSE;
+ALTER TABLE bikes ADD COLUMN locked BOOLEAN DEFAULT FALSE;
 
 CREATE TABLE bike_positions (
   id SERIAL PRIMARY KEY,
