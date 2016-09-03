@@ -27,6 +27,13 @@ GET api/bike/:id/find
 
 Cykeln blippar till med ett glatt ljud
 
+/bike/:id/return/:user
+
+Return bike ID that was rented by user USER. Return true on success otherwise false. 
+
+/bike/:id/rent/:user
+
+User USER rent the bike ID. Return true if success. Otherwise false. 
 
 
 ## Points of interest (POIs)
