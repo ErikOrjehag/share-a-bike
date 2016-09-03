@@ -2,9 +2,9 @@
   <div class="center">
     <h1>Dela en cykel</h1>
     <div class="login-form">
-      <input type="text" placeholder="Mejl-adress"><br>
+      <input type="text" placeholder="Mejl-adress" ng-model="email"><br>
       <input type="password" placeholder="Lösenord"><br>
-      <div class="button">Logga in</div>
+      <div class="button" ng-click="login($event)">Logga in</div>
     </div>
   </div>
 </div>

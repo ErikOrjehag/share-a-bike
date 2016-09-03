@@ -2,11 +2,12 @@
 @spacing: 10px;
 @radius: 3px;
 @font-size: 16px;
+@text-color: #444;
 
 body {
   box-sizing: border-box;
   font-family: "Raleway", sans-serif;
-  color: #444;
+  color: @text-color;
   font-size: @font-size;
   line-height: 150%;
   font-weight: 300;
@@ -16,18 +17,52 @@ body {
   box-sizing: inherit;
 }
 
+a {
+  text-decoration: none;
+  color: @text-color;
+}
+
 menu {
   background: #fff;
-  padding: @spacing * 2;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+  padding: @spacing * 2 0;
+  box-shadow: 0 2px 1px rgba(0,0,0,0.1);
   margin: 0;
   position: fixed;
   width: 100%;
-  clear: both;
 
   .button {
     float: right;
   }
+
+  .menu-items {
+    float: right;
+  }
+
+  .menu-item {
+    cursor: pointer;
+    float: left;
+    padding: @spacing * 3;
+    margin: @spacing * -2 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &:last-child {
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.clear {
+  clear: both;
+}
+
+.push {
+  background: red;
+  height: 84px;
+  width: 100%;
 }
 
 .center {
@@ -39,7 +74,7 @@ menu {
   font-size: 24px;
   font-family: "Lobster", sans-serif;
   float: left;
-  padding: @spacing;
+  padding: @spacing 0;
 }
 
 .jumbo-header {
@@ -74,6 +109,7 @@ input {
   color: #fff;
   border-radius: @radius;
   padding: @spacing;
+  cursor: pointer;
 }
 
 .login-form {
@@ -85,4 +121,27 @@ input {
   .button, input {
     width: 300px;
   }
+}
+
+.find-map {
+  height: 500px;
+  width: 100%;
+  border-radius: @radius;
+  box-shadow: 0 2px 1px rgba(0,0,0,0.1);
+}
+
+.page {
+  margin-top: @spacing * 4;
+}
+
+.left-column {
+  width: 60%;
+  float: left;
+  background: red;
+}
+
+.right-column {
+  width: 60%;
+  float: left;
+  background: blue;
 }

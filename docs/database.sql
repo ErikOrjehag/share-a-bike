@@ -21,8 +21,9 @@ CREATE TABLE bikes (
   owner INT REFERENCES users(id)
 );
 
-ALTER TABLE bikes ADD COLUMN stolen BOOLEAN DEFAULT FALSE;
+ALTER TABLE bikes ADD COLUMN moved BOOLEAN DEFAULT FALSE;
 ALTER TABLE bikes ADD COLUMN locked BOOLEAN DEFAULT FALSE;
+ALTER TABLE bikes ADD COLUMN online BOOLEAN DEFAULT FALSE;
 
 CREATE TABLE bike_positions (
   id SERIAL PRIMARY KEY,
@@ -48,6 +49,7 @@ CREATE TABLE rentals (
 
 
 INSERT INTO users (email, full_name, profile_text, rating, image_url) VALUES ('erik@orjehag.se', 'Erik Örjehag', 'This is a cool service!', 5, '/images/erik.png');
+INSERT INTO users (email, full_name, profile_text, rating, image_url) VALUES ('wille@sjoblom.se', 'William Sjöblom', 'Welcome to my profile!', 5, '/images/wille.png');
 INSERT INTO bikes (bike_name, image_url, owner) VALUES ('Skruttis', '', 1), ('Blå racketen', '', 1);
 INSERT INTO bike_positions (pos, bike_id) VALUES (ST_GeomFromText('POINT(58.394156 15.561379)'), 1), (ST_GeomFromText('POINT(58.395967 15.563529)'), 2);
 INSERT INTO bike_positions (pos, bike_id) VALUES (ST_GeomFromText('POINT(58.394353 15.561931)'), 1), (ST_GeomFromText('POINT(58.397439 15.562656)'), 2);
