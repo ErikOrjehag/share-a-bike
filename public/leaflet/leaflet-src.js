@@ -1,10 +1,10 @@
 /*
- Leaflet 1.0.0-rc.3+ed1a612, a JS library for interactive maps. http://leafletjs.com
- (c) 2010-2016 Vladimir Agafonkin, (c) 2010-2011 CloudMade
+ Leaflet 1.0.0-rc.3+27f05a2, a JS library for interactive maps. http://leafletjs.com
+ (c) 2010-2015 Vladimir Agafonkin, (c) 2010-2011 CloudMade
 */
 (function (window, document, undefined) {
 var L = {
-	version: "1.0.0-rc.3+ed1a612"
+	version: "1.0.0-rc.3+27f05a2"
 };
 
 function expose() {
@@ -497,7 +497,10 @@ L.Evented = L.Class.extend({
 		/* get/init listeners for type */
 		var typeListeners = this._events[type];
 		if (!typeListeners) {
-			typeListeners = [];
+			typeListeners = {
+				listeners: [],
+				count: 0
+			};
 			this._events[type] = typeListeners;
 		}
 
@@ -506,7 +509,7 @@ L.Evented = L.Class.extend({
 			context = undefined;
 		}
 		var newListener = {fn: fn, ctx: context},
-		    listeners = typeListeners;
+		    listeners = typeListeners.listeners;
 
 		// check if fn already there
 		for (var i = 0, len = listeners.length; i < len; i++) {
@@ -520,17 +523,20 @@ L.Evented = L.Class.extend({
 	},
 
 	_off: function (type, fn, context) {
-		var listeners,
+		var typeListeners,
+		    listeners,
 		    i,
 		    len;
 
 		if (!this._events) { return; }
 
-		listeners = this._events[type];
+		typeListeners = this._events[type];
 
-		if (!listeners) {
+		if (!typeListeners) {
 			return;
 		}
+
+		listeners = typeListeners.listeners;
 
 		if (!fn) {
 			// Set all removed listeners to noop so they are not called if remove happens in fire
@@ -541,6 +547,7 @@ L.Evented = L.Class.extend({
 			delete this._events[type];
 			return;
 		}
+
 
 		if (context === this) {
 			context = undefined;
@@ -556,10 +563,11 @@ L.Evented = L.Class.extend({
 
 					// set the removed listener to noop so that's not called if remove happens in fire
 					l.fn = L.Util.falseFn;
+					typeListeners.count--;
 
-					if (this._firingCount) {
+					if (this._isFiring) {
 						/* copy array in case events are being fired */
-						this._events[type] = listeners = listeners.slice();
+						listeners = listeners.slice();
 					}
 					listeners.splice(i, 1);
 
@@ -579,16 +587,17 @@ L.Evented = L.Class.extend({
 		var event = L.Util.extend({}, data, {type: type, target: this});
 
 		if (this._events) {
-			var listeners = this._events[type];
+			var typeListeners = this._events[type];
 
-			if (listeners) {
-				this._firingCount = (this._firingCount + 1) || 1;
+			if (typeListeners) {
+				this._isFiring = true;
+				var listeners = typeListeners.listeners;
 				for (var i = 0, len = listeners.length; i < len; i++) {
 					var l = listeners[i];
 					l.fn.call(l.ctx || this, event);
 				}
 
-				this._firingCount--;
+				this._isFiring = false;
 			}
 		}
 
@@ -603,8 +612,8 @@ L.Evented = L.Class.extend({
 	// @method listens(type: String): Boolean
 	// Returns `true` if a particular event type has any listeners attached to it.
 	listens: function (type, propagate) {
-		var listeners = this._events && this._events[type];
-		if (listeners && listeners.length) { return true; }
+		var typeListeners = this._events && this._events[type];
+		if (typeListeners && typeListeners.count) { return true; }
 
 		if (propagate) {
 			// also check parents for listeners if event propagates
@@ -2652,19 +2661,11 @@ L.Map = L.Evented.extend({
 
 		this._initEvents(true);
 
-		if (this._containerId !== this._container._leaflet_id) {
-			throw new Error('Map container is being reused by another instance');
-		}
-
 		try {
 			// throws error in IE6-8
-			delete this._container._leaflet_id;
-			delete this._containerId;
+			delete this._container._leaflet;
 		} catch (e) {
-			/*eslint-disable */
-			this._container._leaflet_id = undefined;
-			/*eslint-enable */
-			this._containerId = undefined;
+			this._container._leaflet = undefined;
 		}
 
 		L.DomUtil.remove(this._mapPane);
@@ -2967,12 +2968,12 @@ L.Map = L.Evented.extend({
 
 		if (!container) {
 			throw new Error('Map container not found.');
-		} else if (container._leaflet_id) {
+		} else if (container._leaflet) {
 			throw new Error('Map container is already initialized.');
 		}
 
 		L.DomEvent.addListener(container, 'scroll', this._onScroll, this);
-		this._containerId = L.Util.stamp(container);
+		container._leaflet = true;
 	},
 
 	_initLayout: function () {
@@ -3898,7 +3899,7 @@ L.GridLayer = L.Layer.extend({
 	},
 
 	initialize: function (options) {
-		L.setOptions(this, options);
+		options = L.setOptions(this, options);
 	},
 
 	onAdd: function () {
@@ -5373,24 +5374,12 @@ L.icon = function (options) {
 
 
 /*
- * @miniclass Icon.Default (Icon)
- * @aka L.Icon.Default
- * @section
- *
- * A trivial subclass of `Icon`, represents the icon to use in `Marker`s when
- * no icon is specified. Points to the blue marker image distributed with Leaflet
- * releases.
- *
- * In order to change the default icon, just change the properties of `L.Icon.Default.prototype.options`
- * (which is a set of `Icon options`).
+ * L.Icon.Default is the blue marker icon used by default in Leaflet.
  */
 
 L.Icon.Default = L.Icon.extend({
 
 	options: {
-		iconUrl:       'marker-icon.png',
-		iconRetinaUrl: 'marker-icon-2x.png',
-		shadowUrl:     'marker-shadow.png',
 		iconSize:    [25, 41],
 		iconAnchor:  [12, 41],
 		popupAnchor: [1, -34],
@@ -5399,28 +5388,37 @@ L.Icon.Default = L.Icon.extend({
 	},
 
 	_getIconUrl: function (name) {
-		if (!L.Icon.Default.imagePath) {	// Deprecated, backwards-compatibility only
-			L.Icon.Default.imagePath = this._detectIconPath();
+		var key = name + 'Url';
+
+		if (this.options[key]) {
+			return this.options[key];
 		}
 
-		// @option imagePath: String
-		// `L.Icon.Default` will try to auto-detect the absolute location of the
-		// blue icon images. If you are placing these images in a non-standard
-		// way, set this option to point to the right absolute path.
-		return (this.options.imagePath || L.Icon.Default.imagePath) + L.Icon.prototype._getIconUrl.call(this, name);
-	},
+		var path = L.Icon.Default.imagePath;
 
-	_detectIconPath: function () {
-		var el = L.DomUtil.create('div',  'leaflet-default-icon-path', document.body);
-		var path = L.DomUtil.getStyle(el, 'background-image') ||
-		           L.DomUtil.getStyle(el, 'backgroundImage');	// IE8
+		if (!path) {
+			throw new Error('Couldn\'t autodetect L.Icon.Default.imagePath, set it manually.');
+		}
 
-		document.body.removeChild(el);
-
-		return path.indexOf('url') === 0 ?
-			path.replace(/^url\([\"\']?/, '').replace(/[\"\']?\)$/, '') : '';
+		return path + '/marker-' + name + (L.Browser.retina && name === 'icon' ? '-2x' : '') + '.png';
 	}
 });
+
+L.Icon.Default.imagePath = (function () {
+	var scripts = document.getElementsByTagName('script'),
+	    leafletRe = /[\/^]leaflet[\-\._]?([\w\-\._]*)\.js\??/;
+
+	var i, len, src, path;
+
+	for (i = 0, len = scripts.length; i < len; i++) {
+		src = scripts[i].src || '';
+
+		if (src.match(leafletRe)) {
+			path = src.split(leafletRe)[0];
+			return (path ? path + '/' : '') + 'images';
+		}
+	}
+}());
 
 
 
@@ -5443,7 +5441,7 @@ L.Marker = L.Layer.extend({
 	// @aka Marker options
 	options: {
 		// @option icon: Icon = *
-		// Icon class to use for rendering the marker. See [Icon documentation](#L.Icon) for details on how to customize the marker icon. If not specified, a new `L.Icon.Default` is used.
+		// Icon class to use for rendering the marker. See [Icon documentation](#L.Icon) for details on how to customize the marker icon. Set to new `L.Icon.Default()` by default.
 		icon: new L.Icon.Default(),
 
 		// Option inherited from "Interactive layer" abstract class
@@ -5845,6 +5843,11 @@ L.DivOverlay = L.Layer.extend({
 		// of the popup when opening it on some overlays.
 		offset: [0, 7],
 
+		// @option zoomAnimation: Boolean = true
+		// Whether to animate the popup on zoom. Disable it if you have
+		// problems with Flash content inside popups.
+		zoomAnimation: true,
+
 		// @option className: String = ''
 		// A custom CSS class name to assign to the popup.
 		className: '',
@@ -5861,7 +5864,7 @@ L.DivOverlay = L.Layer.extend({
 	},
 
 	onAdd: function (map) {
-		this._zoomAnimated = map._zoomAnimated;
+		this._zoomAnimated = this._zoomAnimated && this.options.zoomAnimation;
 
 		if (!this._container) {
 			this._initLayout();
@@ -6105,11 +6108,7 @@ L.Popup = L.DivOverlay.extend({
 		// Set it to `false` if you want to override the default behavior of
 		// the popup closing when user clicks the map (set globally by
 		// the Map's [closePopupOnClick](#map-closepopuponclick) option).
-		autoClose: true,
-
-		// @option className: String = ''
-		// A custom CSS class name to assign to the popup.
-		className: ''
+		autoClose: true
 	},
 
 	// @namespace Popup
@@ -6188,7 +6187,7 @@ L.Popup = L.DivOverlay.extend({
 		var prefix = 'leaflet-popup',
 		    container = this._container = L.DomUtil.create('div',
 			prefix + ' ' + (this.options.className || '') +
-			' leaflet-zoom-animated');
+			' leaflet-zoom-' + (this._zoomAnimated ? 'animated' : 'hide'));
 
 		if (this.options.closeButton) {
 			var closeButton = this._closeButton = L.DomUtil.create('a', prefix + '-close-button', container);
@@ -6255,7 +6254,9 @@ L.Popup = L.DivOverlay.extend({
 		    containerWidth = this._containerWidth,
 		    layerPos = new L.Point(this._containerLeft, -containerHeight - this._containerBottom);
 
-		layerPos._add(L.DomUtil.getPosition(this._container));
+		if (this._zoomAnimated) {
+			layerPos._add(L.DomUtil.getPosition(this._container));
+		}
 
 		var containerPos = map.layerPointToContainerPoint(layerPos),
 		    padding = L.point(this.options.autoPanPadding),
@@ -6727,7 +6728,7 @@ L.Tooltip = L.DivOverlay.extend({
 
 	_getAnchor: function () {
 		// Where should we anchor the tooltip on the source layer?
-		return L.point(this._source && this._source._getTooltipAnchor && !this.options.sticky ? this._source._getTooltipAnchor() : [0, 0]);
+		return L.point(this._source._getTooltipAnchor && !this.options.sticky ? this._source._getTooltipAnchor() : [0, 0]);
 	}
 
 });
@@ -7143,19 +7144,14 @@ L.layerGroup = function (layers) {
  * @aka L.FeatureGroup
  * @inherits LayerGroup
  *
- * Extended `LayerGroup` that makes it easier to do the same thing to all its member layers:
- *  * [`bindPopup`](#layer-bindpopup) binds a popup to all of the layers at once (likewise with [`bindTooltip`](#layer-bindtooltip))
- *  * Events are propagated to the `FeatureGroup`, so if the group has an event
- * handler, it will handle events from any of the layers. This includes mouse events
- * and custom events.
- *  * Has `layeradd` and `layerremove` events
+ * Extended `LayerGroup` that also has mouse events (propagated from members of the group) and a shared bindPopup method.
  *
  * @example
  *
  * ```js
  * L.featureGroup([marker1, marker2, polyline])
  * 	.bindPopup('Hello world!')
- * 	.on('click', function() { alert('Clicked on a member of the group!'); })
+ * 	.on('click', function() { alert('Clicked on a group!'); })
  * 	.addTo(map);
  * ```
  */
@@ -7171,8 +7167,6 @@ L.FeatureGroup = L.LayerGroup.extend({
 
 		L.LayerGroup.prototype.addLayer.call(this, layer);
 
-		// @event layeradd: LayerEvent
-		// Fired when a layer is added to this `FeatureGroup`
 		return this.fire('layeradd', {layer: layer});
 	},
 
@@ -7188,8 +7182,6 @@ L.FeatureGroup = L.LayerGroup.extend({
 
 		L.LayerGroup.prototype.removeLayer.call(this, layer);
 
-		// @event layerremove: LayerEvent
-		// Fired when a layer is removed from this `FeatureGroup`
 		return this.fire('layerremove', {layer: layer});
 	},
 
@@ -7247,9 +7239,6 @@ L.featureGroup = function (layers) {
  *
  * Do not use this class directly, use `SVG` and `Canvas` instead.
  *
- * @event update: Event
- * Fired when the renderer updates its bounds, center and zoom, for example when
- * its map has moved
  */
 
 L.Renderer = L.Layer.extend({
@@ -7337,8 +7326,6 @@ L.Renderer = L.Layer.extend({
 
 		this._center = this._map.getCenter();
 		this._zoom = this._map.getZoom();
-
-		this.fire('update');
 	}
 });
 
@@ -7461,17 +7448,16 @@ L.Path = L.Layer.extend({
 		this._renderer._initPath(this);
 		this._reset();
 		this._renderer._addPath(this);
-		this._renderer.on('update', this._update, this);
 	},
 
 	onRemove: function () {
 		this._renderer._removePath(this);
-		this._renderer.off('update', this._update, this);
 	},
 
 	getEvents: function () {
 		return {
 			zoomend: this._project,
+			moveend: this._update,
 			viewreset: this._reset
 		};
 	},
@@ -7869,11 +7855,6 @@ L.Polyline = L.Path.extend({
 	// @method getCenter(): LatLng
 	// Returns the center ([centroid](http://en.wikipedia.org/wiki/Centroid)) of the polyline.
 	getCenter: function () {
-		// throws error when not yet added to map as this center calculation requires projected coordinates
-		if (!this._map) {
-			throw new Error('Must add layer to map before using getCenter()');
-		}
-
 		var i, halfDist, segDist, dist, p1, p2, ratio,
 		    points = this._rings[0],
 		    len = points.length;
@@ -8178,11 +8159,6 @@ L.Polygon = L.Polyline.extend({
 	},
 
 	getCenter: function () {
-		// throws error when not yet added to map as this center calculation requires projected coordinates
-		if (!this._map) {
-			throw new Error('Must add layer to map before using getCenter()');
-		}
-
 		var i, j, p1, p2, f, area, x, y, center,
 		    points = this._rings[0],
 		    len = points.length;
@@ -12818,7 +12794,7 @@ L.Map.include(!zoomAnimated ? {} : {
 // @section Methods for modifying map state
 L.Map.include({
 
-	// @method flyTo(latlng: LatLng, zoom?: Number, options?: Zoom/pan options): this
+	// @method flyTo(latlng: LatLng, zoom?: Number, options?: Zoom/Pan options): this
 	// Sets the view of the map (geographical center and zoom) performing a smooth
 	// pan-zoom animation.
 	flyTo: function (targetCenter, targetZoom, options) {

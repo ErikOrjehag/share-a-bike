@@ -8,7 +8,8 @@ app.config(function ($routeProvider, $locationProvider) {
        controller: 'homeCtrl'
     })
     .when('/find', {
-      templateUrl: 'partials/find.html'
+      templateUrl: 'partials/find.html',
+      controller: 'findCtrl'
     })
     .when('/profile', {
       templateUrl: 'partials/profile.html'

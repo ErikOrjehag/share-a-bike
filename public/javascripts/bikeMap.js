@@ -5,7 +5,9 @@ app.directive('bikeMap', function($filter){
 
     restrict: 'A',
     replace: true,
-    scope: {},
+    scope: {
+      bikes: "=bikeMapBikes"
+    },
     template: '<div></div>',
 
     link : function (scope, element, attrs) {
@@ -30,6 +32,31 @@ app.directive('bikeMap', function($filter){
 
     controller: function ($scope) {
 
+      $scope.$watch('bikes', function (newValue, oldValue) {
+
+        if ($scope.bikeLayer) {
+          $scope.map.removeLayer($scope.bikeLayer);
+        }
+
+        if (typeof newValue !== "undefined") {
+
+          var markers = newValue.map(function (bike) {
+            return L.marker([bike.positions[0].lat, bike.positions[0].lon]);
+          });
+
+          var lines = newValue.map(function (bike) {
+            return L.polyline(bike.positions.map(function (position) {
+              return [position.lat, position.lon];
+            }));
+          });
+
+          var features = markers.concat(lines);
+
+          $scope.bikeLayer = L.featureGroup(features);
+
+          $scope.map.addLayer($scope.bikeLayer);
+        }
+      });
     }
   };
 
