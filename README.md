@@ -14,6 +14,21 @@ GET /api/user/:id
 }
 
 
+GET api/bike/:id/lock
+
+Låser cykeln, returnerar true om electronen lyckats ta emot, annars false
+
+GET api/bike/:id/unlock
+
+Låser upp cykeln, returnerar true om electronen lyckats ta emot, annars false
+
+
+GET api/bike/:id/find
+
+Cykeln blippar till med ett glatt ljud
+
+
+
 ## Points of interest (POIs)
 
 Cykelparkering: 
