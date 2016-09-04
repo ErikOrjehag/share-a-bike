@@ -2,11 +2,12 @@
 
 ## Till Sebbe
 
-Tre saker som den ska låta och blinka på: 
+Fyra saker som den ska låta och blinka på: 
 
 1. När någon har snott den ska den låta högt och blinka tydligt i flera färger. 
 2. När man larmar och larmar av cykeln. Typ som en bil blinkar med varningsblinkers och låter lite blip blip när man larmar. 
 3. När man försöker hitta sin cykel när man är i närheten ska den låta högt, men inte illa. Den får gärna blinka lite vackra färger också så man hittar cykeln i mörkret. 
+4. När någon hyr eller lämnar tillbaka ska den blinka och låta lite diskret (men tillräckligt högt för att mikrofon och sånt ska fånga upp ljudet i Dataton).
 
 Implementera gärna också ett sätt att aktivera larmet från servern. Typ ett funktionsanrop där man kan aktivera och deaktivera larmet. För att vi ska kunna fixa vid pitchen. 
 
