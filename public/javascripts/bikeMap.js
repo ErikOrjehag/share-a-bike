@@ -41,25 +41,10 @@ app.directive('bikeMap', function($filter){
 
         if (typeof newValue !== "undefined") {
 
-
-          /*var port = new L.Marker.Label([0, 0], {
-            icon: new L.Icon.Label({
-              iconUrl: config.aismodhost + '/icon/port/ff6c00',
-              iconSize: [20, 20],
-              labelText: '',
-              labelAnchor: new L.Point(25, -3),
-              wrapperAnchor: new L.Point(10, 10), // half the size
-              iconAnchor: new L.Point(0, 0)
-            }),
-            zIndexOffset: 2000,
-            revealing: true
-          });*/
-
           var markers = newValue.map(function (bike) {
-            //return L.marker([bike.positions[0].lat, bike.positions[0].lon]);
             return new L.Marker.Label([bike.positions[0].lat, bike.positions[0].lon], {
               icon: new L.Icon.Label({
-                iconUrl: "http://138.68.129.101/images/wille.png",
+                iconUrl: "http://138.68.129.101/images/icons/bicycle-rider.png",
                 iconSize: [30, 30],
                 labelText: bike.bike_name,
                 wrapperAnchor: new L.Point(15, 15),
@@ -82,6 +67,8 @@ app.directive('bikeMap', function($filter){
           var features = markers.concat(lines);
 
           $scope.bikeLayer = L.featureGroup(features);
+
+          console.log($scope.bikeLayer.getBounds());
 
           $scope.map.addLayer($scope.bikeLayer);
         }

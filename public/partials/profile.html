@@ -37,6 +37,12 @@
               </td>
               <td class="bike-info-td">
                 <div class="bike-name">{{ borrowing.bike_name }}</div>
+                <div>
+                  <span>Status: </span>
+                  <span ng-show="!stolen(borrowed) && borrowed.locked">Locked <img class="icon" src="/images/locked.png"></span>
+                  <span ng-show="!stolen(borrowed) && !borrowed.locked">Unlocked <img class="icon" src="/images/unlocked.png"></span>
+                  <span ng-show="stolen(borrowed)">Stolen!</span>
+                </div>
                 <div style="font-style: italic">
                   Owner: {{ borrowing.full_name }}
                 </div>
@@ -48,13 +54,6 @@
           </table>
           <br>
           <div class="button" ng-click="return()">Return</div>
-          <br><br>
-          <div>
-            <span>Status: </span>
-            <span ng-show="!stolen(borrowed) && borrowed.locked">Locked</span>
-            <span ng-show="!stolen(borrowed) && !borrowed.locked">Unlocked</span>
-            <span ng-show="stolen(borrowed)">Stolen!</span>
-          </div>
         </div>
         <div class="clear"></div>
       </div>
@@ -79,8 +78,8 @@
                   <div class="bike-name">{{ bike.bike_name }}</div>
                   <div>
                     <span>Status: </span>
-                    <span ng-show="!stolen(bike) && bike.locked">Locked</span>
-                    <span ng-show="!stolen(bike) && !bike.locked">Unlocked</span>
+                    <span ng-show="!stolen(bike) && bike.locked">Locked <img class="icon" src="/images/locked.png"></span>
+                    <span ng-show="!stolen(bike) && !bike.locked">Unlocked <img class="icon" src="/images/unlocked.png"></span>
                     <span ng-show="stolen(bike)">Stolen!</span>
                   </div>
                   <div class="rating" ng-show="bike.rented_by">
