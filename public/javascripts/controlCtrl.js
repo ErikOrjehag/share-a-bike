@@ -37,16 +37,15 @@ app.controller("controlCtrl", function ($scope, $http, loginFactory, $timeout) {
     $scope.lockUnlockWaiting = true;
     $http.get("/api/bike/" + bike.id + "/lock")
       .then(function (response) {
+        $scope.lockUnlockWaiting = false;
         console.log(response);
         if (promise) {
           $timeout.cancel(promise);
         }
         fetchBorrowing();
       }, function (error) {
-        console.log(error);
-      })
-      .finally(function () {
         $scope.lockUnlockWaiting = false;
+        console.log(error);
       });
   };
 
@@ -54,17 +53,16 @@ app.controller("controlCtrl", function ($scope, $http, loginFactory, $timeout) {
     $scope.lockUnlockWaiting = true;
     $http.get("/api/bike/" + bike.id + "/unlock")
       .then(function (response) {
+        $scope.lockUnlockWaiting = false;
         console.log(response);
         if (promise) {
           $timeout.cancel(promise);
         }
         fetchBorrowing();
       }, function (error) {
+        $scope.lockUnlockWaiting = false;
         console.log(error);
       })
-      .finally(function () {
-        $scope.lockUnlockWaiting = false;
-      });
   };
 
 });

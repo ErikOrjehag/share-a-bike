@@ -12,11 +12,11 @@ router.get("/bike/:id/rent/:user", function (req, res) {
   var user_id = req.params.user;
 
   pool.connect(function(error, client, done) {
-    if (error) return console.log(error);
+    if (error) return console.log("fredrik 1", error);
 
     client.query('SELECT rented_by FROM bikes WHERE id = $1', [bike_id], function(error, result) {
 
-      if (error) return console.log(error);
+      if (error) return console.log("fredrik 2", error);
       
       if(result.rows[0].rented_by !== null){
         done();
@@ -25,7 +25,7 @@ router.get("/bike/:id/rent/:user", function (req, res) {
       } else {
         client.query("UPDATE bikes SET rented_by = $1 WHERE id = $2", [user_id, bike_id], function(error, result) {
           done();
-          if (error) return console.log(error);
+          if (error) return console.log("fredrik 3", error);
           console.log("Bike " + bike_id + " was rented by " + user_id);
           res.json(true);
         });
@@ -39,9 +39,9 @@ router.get("/bike/:id/return/:user", function (req, res) {
   var user_id = req.params.user;
 
   pool.connect(function(error, client, done) {
-    if (error) return console.log(error);
+    if (error) return console.log("fredrik 4", error);
     client.query('SELECT rented_by FROM bikes WHERE id = $1', [bike_id], function(error, result) {
-      if (error) return console.log(error);
+      if (error) return console.log("fredrik 5", error);
       
       if(result.rows[0].rented_by != user_id){
         done();
@@ -50,7 +50,7 @@ router.get("/bike/:id/return/:user", function (req, res) {
       } else {
         client.query("UPDATE bikes SET rented_by = null WHERE id = $1", [bike_id], function(error, result) {
           done();
-          if (error) return console.log(error);
+          if (error) return console.log("fredrik 6", error);
           console.log("Bike " + bike_id + " was returned by " + user_id);
           res.json(true);
         });
@@ -77,7 +77,7 @@ router.get("/bike/:id/unlock", function (req, res) {
 
 function lock(bikeId, callback){
   pool.connect(function(error, client, done) {
-    if (error) return console.log(error);
+    if (error) return console.log("fredrik 7", error);
     client.query('SELECT electron_id FROM bikes WHERE id = $1', [bikeId], function(error, result) {
       done();
       if (error) return console.log(error);
@@ -102,7 +102,7 @@ function unlock(bikeId, callback){
     if (error) return console.log(error);
     client.query('SELECT electron_id FROM bikes WHERE id = $1', [bikeId], function(error, result) {
       done();
-      if (error) return console.log(error);
+      if (error) return console.log("fredrik 8", error);
       var coreid = result.rows[0].electron_id;
       particle.callFunction({deviceId: coreid, name: 'L', argument: '0', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9'}).then( function(data) {
         saveLockStatus(coreid, false);
@@ -121,10 +121,10 @@ function unlock(bikeId, callback){
 
 function saveLockStatus(coreid, status){
   pool.connect(function(error, client, done) {
-    if (error) return console.log(error);
+    if (error) return console.log("fredrik 9", error);
     client.query("UPDATE bikes SET locked = $1 WHERE electron_id = $2", [status, coreid], function(error, result) {
       done();
-      if (error) return console.log(error);
+      if (error) return console.log("fredrik 10", error);
     });
   });
 }
@@ -133,10 +133,10 @@ function saveLockStatus(coreid, status){
 
 router.get("/bike/:id/find", function (req, res) {
   pool.connect(function(error, client, done) {
-    if (error) return console.log(error);
+    if (error) return console.log("fredrik 11", error);
     client.query('SELECT electron_id FROM bikes WHERE id = $1', [req.params.id], function(error, result) {
       done();
-      if (error) return console.log(error);
+      if (error) return console.log("fredrik 12", error);
       var coreid = result.rows[0].electron_id;
       particle.callFunction({deviceId: coreid, name: 'F', argument: '', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9'}).then( function(data) {
         console.log('Bicycle find sent succesfully:', data);
@@ -152,17 +152,17 @@ router.get("/bike/:id/find", function (req, res) {
 
 router.get("/user/:id/report/:pos", function (req, res) {
   pool.connect(function(error, client, done) {
-    if (error) return console.log(error);
+    if (error) return console.log("fredrik 13", error);
     client.query("UPDATE users SET pos=ST_GeomFromText($1::text) WHERE id = $2", ["POINT("+req.params.pos.replace(',',' ')+")", req.params.id], function(error, result) {
 
-      if (error) {res.json(false); return console.log(error);};
+      if (error) {res.json(false); return console.log("fredrik 14", error);};
       console.log("Position for user #"+req.params.id+" updated to "+req.params.pos);
       res.json(true);
 
       // Should the bike get locked or unlocked? Where is the bike that this user have borrowed?
       client.query("SELECT ST_Distance(pos,ST_GeomFromText($1::text)) as distance, bike_id FROM bike_positions WHERE bike_id = (SELECT id FROM bikes WHERE rented_by = $2) ORDER BY ts DESC LIMIT 1", ["POINT("+req.params.pos.replace(',',' ')+")", req.params.id], function(error, result) {
         done();
-        if (error) {return console.log(error);}
+        if (error) {return console.log("fredrik 15", error);}
         if(result.rows.length == 0){
           console.log("User #" + req.params.id + " doesn't rent any bikes currently");
           return;

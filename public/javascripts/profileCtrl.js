@@ -11,7 +11,8 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
 
   $scope.comments = [];
 
-  $scope.lockUnlockWaiting = false;
+  $scope.lockWaiting = false;
+  $scope.unlockWaiting = false;
   $scope.findWaiting = false;
 
   $http.get("/api/user/" + loginFactory.getUserId())
@@ -105,36 +106,38 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
   };
 
   $scope.lock = function (bike) {
-    $scope.lockUnlockWaiting = true;
+    $scope.lockWaiting = true;
     $http.get("/api/bike/" + bike.id + "/lock")
       .then(function (response) {
+        $scope.lockWaiting = false;
+        console.log($scope.lockWaiting);
         console.log(response);
         if (promise) {
           $timeout.cancel(promise);
         }
         fetchBorrowing();
       }, function (error) {
+        $scope.lockWaiting = false;
+        console.log($scope.lockWaiting);
         console.log(error);
-      })
-      .finally(function () {
-        $scope.lockUnlockWaiting = false;
       });
   };
 
   $scope.unlock = function (bike) {
-    $scope.lockUnlockWaiting = true;
+    $scope.unlockWaiting = true;
     $http.get("/api/bike/" + bike.id + "/unlock")
       .then(function (response) {
+        $scope.unlockWaiting = false;
+        console.log($scope.unlockWaiting);
         console.log(response);
         if (promise) {
           $timeout.cancel(promise);
         }
         fetchBorrowing();
       }, function (error) {
+        $scope.unlockWaiting = false;
+        console.log($scope.unlockWaiting);
         console.log(error);
-      })
-      .finally(function () {
-        $scope.lockUnlockWaiting = false;
       });
   };
 
