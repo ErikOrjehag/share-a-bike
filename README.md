@@ -8,6 +8,7 @@ Tre saker som den ska låta och blinka på:
 2. När man larmar och larmar av cykeln. Typ som en bil blinkar med varningsblinkers och låter lite blip blip när man larmar. 
 3. När man försöker hitta sin cykel när man är i närheten ska den låta högt, men inte illa. Den får gärna blinka lite vackra färger också så man hittar cykeln i mörkret. 
 
+Implementera gärna också ett sätt att aktivera larmet från servern. Typ ett funktionsanrop där man kan aktivera och deaktivera larmet. För att vi ska kunna fixa vid pitchen. 
 
 ## Till Erik & William
 
@@ -34,7 +35,7 @@ Tre saker som den ska låta och blinka på:
 3. Låsa cykel när man går bort från den
 4. Fixa pitch och förbereda sånt.
 5. Samla in mer data för fler cyklar. 
-
+6. Lyssna på A-event för att veta när larmet gått. 
 
 
 ## Eget API
