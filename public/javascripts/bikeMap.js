@@ -41,8 +41,32 @@ app.directive('bikeMap', function($filter){
 
         if (typeof newValue !== "undefined") {
 
+
+          /*var port = new L.Marker.Label([0, 0], {
+            icon: new L.Icon.Label({
+              iconUrl: config.aismodhost + '/icon/port/ff6c00',
+              iconSize: [20, 20],
+              labelText: '',
+              labelAnchor: new L.Point(25, -3),
+              wrapperAnchor: new L.Point(10, 10), // half the size
+              iconAnchor: new L.Point(0, 0)
+            }),
+            zIndexOffset: 2000,
+            revealing: true
+          });*/
+
           var markers = newValue.map(function (bike) {
-            return L.marker([bike.positions[0].lat, bike.positions[0].lon]);
+            //return L.marker([bike.positions[0].lat, bike.positions[0].lon]);
+            return new L.Marker.Label([bike.positions[0].lat, bike.positions[0].lon], {
+              icon: new L.Icon.Label({
+                iconUrl: "http://138.68.129.101/images/wille.png",
+                iconSize: [30, 30],
+                labelText: bike.bike_name,
+                wrapperAnchor: new L.Point(15, 15),
+                iconAnchor: new L.Point(0, 0),
+                labelAnchor: new L.Point(35, 3)
+              })
+            });
           });
 
           var lines = [];
