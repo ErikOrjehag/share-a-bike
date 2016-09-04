@@ -5,9 +5,14 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
   $scope.borrowing = false;
   $scope.borrowingList = [];
   var promise;
-  var polltime = 1000;
+  var polltime = 3000;
 
   $scope.bikes = [];
+
+  $scope.comments = [];
+
+  $scope.lockUnlockWaiting = false;
+  $scope.findWaiting = false;
 
   $http.get("/api/user/" + loginFactory.getUserId())
     .then(function (response) {
@@ -20,10 +25,8 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
     });
 
   function fetchBorrowing() {
-    console.log("fetch");
     $http.get("/api/bikeBorrowing/" + loginFactory.getUserId())
       .then(function (response) {
-        console.log(response.data);
         if (response.data) {
           $http.get("/api/bike/" + response.data)
             .then(function (response) {
@@ -50,8 +53,8 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
     return bike && bike.moved && bike.locked;
   };
 
-  $scope.return = function () {
-    $http.get("/api/bike/" + $scope.borrowing.id + "/return/" + loginFactory.getUserId())
+  $scope.return = function (bike) {
+    $http.get("/api/bike/" + bike.id + "/return/" + loginFactory.getUserId())
       .then(function (result) {
         if (result.data) {
           if (promise) {
@@ -87,5 +90,59 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
       "background-image": "url(\"" + bike.image_url + "\")"
     };
   };
+
+  $scope.find = function (bike) {
+    $scope.findWaiting = true;
+    $http.get("/api/bike/" + bike.id + "/find")
+      .then(function (response) {
+        console.log(response);
+      }, function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        $scope.findWaiting = false;
+      });
+  };
+
+  $scope.lock = function (bike) {
+    $scope.lockUnlockWaiting = true;
+    $http.get("/api/bike/" + bike.id + "/lock")
+      .then(function (response) {
+        console.log(response);
+        if (promise) {
+          $timeout.cancel(promise);
+        }
+        fetchBorrowing();
+      }, function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        $scope.lockUnlockWaiting = false;
+      });
+  };
+
+  $scope.unlock = function (bike) {
+    $scope.lockUnlockWaiting = true;
+    $http.get("/api/bike/" + bike.id + "/unlock")
+      .then(function (response) {
+        console.log(response);
+        if (promise) {
+          $timeout.cancel(promise);
+        }
+        fetchBorrowing();
+      }, function (error) {
+        console.log(error);
+      })
+      .finally(function () {
+        $scope.lockUnlockWaiting = false;
+      });
+  };
+
+  $http.get("/api/user/" + loginFactory.getUserId() + "/comments")
+    .then(function (response) {
+      $scope.comments = response.data;
+    }, function (error) {
+      console.log(errors);
+    });
 
 });

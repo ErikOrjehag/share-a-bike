@@ -24,7 +24,6 @@ router.get("/bike/:id", function (req, res) {
   pool.connect(function(error, client, done) {
     if (error) return console.log(error);
     client.query('SELECT bikes.id, bikes.bike_name, bikes.image_url, bikes.owner, bikes.electron_id, bikes.locked, bikes.moved, bikes.online, bikes.rented_by, users.full_name, users.rating FROM bikes LEFT JOIN users ON bikes.owner = users.id WHERE bikes.id = $1 ORDER BY bikes.id DESC', [req.params.id], function(error, bikes) {
-      done();
 
       if (error) return console.log(error);
 
@@ -102,3 +101,18 @@ router.get("/bikeBorrowing/:userId", function (req, res) {
     });
   })
 });
+
+router.get("/user/:userId/comments", function (req, res) {
+  pool.connect(function (error, client, done) {
+    if (error) return console.log(error);
+
+    client.query('SELECT text, users.full_name, users.image_url FROM user_comments LEFT JOIN users ON user_comments.from_user = users.id WHERE to_user = $1', [req.params.userId], function (error, result) {
+      done();
+
+      if (error) return console.log(error);
+
+      res.json(result.rows);
+    });
+  })
+});
+

@@ -2,8 +2,15 @@
 app.controller("findCtrl", function ($scope, $http, $timeout, $location, loginFactory) {
 
   $scope.bikes = [];
-  var pollTime = 1000;
+  var pollTime = 3000;
   var promise = null;
+
+  $scope.checkboxes = {
+    pumps: true,
+    parking: false,
+    turistinfo: false,
+    museum: false
+  };
 
   function fetchBikes() {
     $http.get("/api/bikes")
@@ -79,6 +86,10 @@ app.controller("findCtrl", function ($scope, $http, $timeout, $location, loginFa
       }, function (error) {
         console.log(error);
       });
+  };
+
+  $scope.stolen = function (bike) {
+    return bike && bike.moved && bike.locked;
   };
 
 });

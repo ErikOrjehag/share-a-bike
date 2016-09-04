@@ -16,7 +16,19 @@
     </div>
     <div class="right-column">
       <div class="comments">
-        Comments...
+        <table>
+          <tr ng-repeat="comment in comments | limitTo:3">
+            <td style="width: 1px; vertical-align: top;">
+              <div class="comment-image" ng-style="{ 'background-image': 'url({{ comment.image_url }})' }"></div>
+            </td>
+            <td style="vertical-align: top;">
+              <div class="comment">
+                <div>{{ comment.full_name }}</div>
+                <div>{{ comment.text }}</div>
+              </div>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
     <div class="clear"></div>
@@ -27,10 +39,10 @@
       <h2>You are borrowing this bike</h2>
       <div>
         <div class="left-column">
-          <div bike-map bike-map-bikes="borrowingList" bike-map-show-paths="true" class="borrow-map"></div>
+          <div bike-map bike-map-bikes="borrowingList" bike-map-show-paths="true" bike-map-show-points="false" class="borrow-map"></div>
         </div>
         <div class="right-column">
-          <table style="width: 100%;">
+          <table style="width: 100%;" ng-class="{ 'stolen': stolen(borrowing) }">
             <tr>
               <td style="width: 1px;">
                 <div class="bike-image" ng-style="image(borrowing)"></div>
@@ -39,9 +51,9 @@
                 <div class="bike-name">{{ borrowing.bike_name }}</div>
                 <div>
                   <span>Status: </span>
-                  <span ng-show="!stolen(borrowed) && borrowed.locked">Locked <img class="icon" src="/images/locked.png"></span>
-                  <span ng-show="!stolen(borrowed) && !borrowed.locked">Unlocked <img class="icon" src="/images/unlocked.png"></span>
-                  <span ng-show="stolen(borrowed)">Stolen!</span>
+                  <span ng-show="!stolen(borrowing) && borrowing.locked">Locked <img class="icon" src="/images/locked.png"></span>
+                  <span ng-show="!stolen(borrowing) && !borrowing.locked">Unlocked <img class="icon" src="/images/unlocked.png"></span>
+                  <span ng-show="stolen(borrowing)" style="font-weight: bold;">Stolen!</span>
                 </div>
                 <div style="font-style: italic">
                   Owner: {{ borrowing.full_name }}
@@ -53,7 +65,10 @@
             </tr>
           </table>
           <br>
-          <div class="button" ng-click="return()">Return</div>
+          <div class="button" ng-click="return(borrowing)">Return</div>
+          <div class="button" ng-click="find(borrowing)" ng-class="{ 'waiting': findWaiting }">Find</div>
+          <div class="button" ng-click="lock(borrowing)" ng-show="!borrowing.locked" ng-class="{ 'waiting': lockUnlockWaiting }">Lock</div>
+          <div class="button" ng-click="unlock(borrowing)" ng-show="borrowing.locked" ng-class="{ 'waiting': lockUnlockWaiting }">Unlock</div>
         </div>
         <div class="clear"></div>
       </div>
@@ -64,12 +79,12 @@
     <h2>You own these bikes</h2>
     <div>
       <div class="left-column">
-        <div class="borrow-map" bike-map bike-map-bikes="bikes" bike-map-show-paths="true"></div>
+        <div class="borrow-map" bike-map bike-map-bikes="bikes" bike-map-show-paths="true" bike-map-show-points="false"></div>
       </div>
       <div class="right-column">
         <div class="bike-list">
           <div class="bike-list-row" ng-repeat="bike in bikes">
-            <table style="width: 100%;">
+            <table style="width: 100%;" ng-class="{ 'stolen': stolen(bike) }">
               <tr>
                 <td style="width: 1px;">
                   <div class="bike-image" ng-style="image(bike)"></div>
@@ -86,8 +101,15 @@
                     <div>Borrowed by: {{ bike.rented_by_full_name }}</div>
                     <div>Rating: {{ bike.rented_by_rating }}%</div>
                   </div>
-                  <div class="rating" ng-show="!bike.rented_by">
-                    Available
+                  <div ng-show="!bike.rented_by">
+                    <div class="rating">
+                      Available
+                    </div>
+                    <!--<div>
+                      <div class="button" ng-click="find(bike)">Find</div>
+                      <div class="button" ng-click="lock(bike)" ng-show="!bike.locked">Lock</div>
+                      <div class="button" ng-click="unlock(bike)" ng-show="bike.locked">Unlock</div>
+                    </div>-->
                   </div>
                 </td>
               </tr>
