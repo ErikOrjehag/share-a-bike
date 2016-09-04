@@ -36,6 +36,10 @@ Return bike ID that was rented by user USER. Return true on success otherwise fa
 User USER rent the bike ID. Return true if success. Otherwise false. 
 
 
+/api/points
+Ger koordinater till Point of Interests (sammanställt det som finns nedanför)
+
+
 ## Points of interest (POIs)
 
 Cykelparkering: 
