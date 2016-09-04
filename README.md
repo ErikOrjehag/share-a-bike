@@ -20,6 +20,7 @@ Implementera gärna också ett sätt att aktivera larmet från servern. Typ ett 
 ## Till Erik
 
 1. Visa kommentarer
+2. Visa testimonials och cirklar a la botillsammans!
 
 
 ## Till William
