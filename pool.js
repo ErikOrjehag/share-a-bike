@@ -6,8 +6,8 @@ var config = {
   password: '123',
   host: 'localhost',
   port: 5432,
-  max: 30,
-  idleTimeoutMillis: 30000
+  max: 20,
+  idleTimeoutMillis: 10000
 };
 
 var pool = module.exports = new pg.Pool(config);

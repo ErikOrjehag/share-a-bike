@@ -285,12 +285,27 @@ label {
   animation-direction: alternate;
 }
 
-/* Standard syntax */
 @keyframes red-flash {
   from {
-    background-color: #f66;
+    background: #f66;
   }
   to {
-    background-color: transparent;
+    background: transparent;
+  }
+}
+
+.waiting {
+  animation-name: blue-flash;
+  animation-duration: 500ms;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes blue-flash {
+  from {
+    background: @theme-color;
+  }
+  to {
+    background: lighten(@theme-color, 20%);
   }
 }

@@ -11,6 +11,9 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
 
   $scope.comments = [];
 
+  $scope.lockUnlockWaiting = false;
+  $scope.findWaiting = false;
+
   $http.get("/api/user/" + loginFactory.getUserId())
     .then(function (response) {
       $scope.user = response.data;
@@ -89,15 +92,20 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
   };
 
   $scope.find = function (bike) {
+    $scope.findWaiting = true;
     $http.get("/api/bike/" + bike.id + "/find")
       .then(function (response) {
         console.log(response);
       }, function (error) {
         console.log(error);
+      })
+      .finally(function () {
+        $scope.findWaiting = false;
       });
   };
 
   $scope.lock = function (bike) {
+    $scope.lockUnlockWaiting = true;
     $http.get("/api/bike/" + bike.id + "/lock")
       .then(function (response) {
         console.log(response);
@@ -107,10 +115,14 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
         fetchBorrowing();
       }, function (error) {
         console.log(error);
+      })
+      .finally(function () {
+        $scope.lockUnlockWaiting = false;
       });
   };
 
   $scope.unlock = function (bike) {
+    $scope.lockUnlockWaiting = true;
     $http.get("/api/bike/" + bike.id + "/unlock")
       .then(function (response) {
         console.log(response);
@@ -120,6 +132,9 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
         fetchBorrowing();
       }, function (error) {
         console.log(error);
+      })
+      .finally(function () {
+        $scope.lockUnlockWaiting = false;
       });
   };
 

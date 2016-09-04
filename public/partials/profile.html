@@ -66,9 +66,9 @@
           </table>
           <br>
           <div class="button" ng-click="return(borrowing)">Return</div>
-          <div class="button" ng-click="find(borrowing)">Find</div>
-          <div class="button" ng-click="lock(borrowing)" ng-show="!borrowing.locked">Lock</div>
-          <div class="button" ng-click="unlock(borrowing)" ng-show="borrowing.locked">Unlock</div>
+          <div class="button" ng-click="find(borrowing)" ng-class="{ 'waiting': findWaiting }">Find</div>
+          <div class="button" ng-click="lock(borrowing)" ng-show="!borrowing.locked" ng-class="{ 'waiting': lockUnlockWaiting }">Lock</div>
+          <div class="button" ng-click="unlock(borrowing)" ng-show="borrowing.locked" ng-class="{ 'waiting': lockUnlockWaiting }">Unlock</div>
         </div>
         <div class="clear"></div>
       </div>

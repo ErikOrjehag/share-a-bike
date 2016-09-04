@@ -6,6 +6,8 @@ app.controller("controlCtrl", function ($scope, $http, loginFactory, $timeout) {
   var promise;
   var polltime = 3000;
 
+  $scope.lockUnlockWaiting = false;
+
   $scope.user_id = loginFactory.getUserId();
 
   function fetchBorrowing() {
@@ -32,6 +34,7 @@ app.controller("controlCtrl", function ($scope, $http, loginFactory, $timeout) {
   fetchBorrowing();
 
   $scope.lock = function (bike) {
+    $scope.lockUnlockWaiting = true;
     $http.get("/api/bike/" + bike.id + "/lock")
       .then(function (response) {
         console.log(response);
@@ -41,10 +44,14 @@ app.controller("controlCtrl", function ($scope, $http, loginFactory, $timeout) {
         fetchBorrowing();
       }, function (error) {
         console.log(error);
+      })
+      .finally(function () {
+        $scope.lockUnlockWaiting = false;
       });
   };
 
   $scope.unlock = function (bike) {
+    $scope.lockUnlockWaiting = true;
     $http.get("/api/bike/" + bike.id + "/unlock")
       .then(function (response) {
         console.log(response);
@@ -54,6 +61,9 @@ app.controller("controlCtrl", function ($scope, $http, loginFactory, $timeout) {
         fetchBorrowing();
       }, function (error) {
         console.log(error);
+      })
+      .finally(function () {
+        $scope.lockUnlockWaiting = false;
       });
   };
 
