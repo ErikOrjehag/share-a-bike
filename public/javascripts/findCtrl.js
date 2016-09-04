@@ -5,6 +5,13 @@ app.controller("findCtrl", function ($scope, $http, $timeout, $location, loginFa
   var pollTime = 1000;
   var promise = null;
 
+  $scope.checkboxes = {
+    pumps: true,
+    parking: false,
+    turistinfo: false,
+    museum: false
+  };
+
   function fetchBikes() {
     $http.get("/api/bikes")
       .then(function (response) {

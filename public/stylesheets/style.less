@@ -3,6 +3,7 @@
 @radius: 3px;
 @font-size: 16px;
 @text-color: #444;
+@theme-color: #1e64be;
 
 body {
   box-sizing: border-box;
@@ -106,7 +107,7 @@ input {
 .button {
   display: inline-block;
   text-align: center;
-  background: #1e64be;
+  background: @theme-color;
   color: #fff;
   border-radius: @radius;
   padding: @spacing;
@@ -138,7 +139,7 @@ input {
 }
 
 .find-map {
-  height: 700px;
+  height: 600px;
 }
 
 .borrow-map {
@@ -165,14 +166,32 @@ input {
 }
 
 
-.bike-image {
-  width: 100px;
-  height: 100px;
+.bike-image, .comment-image, .profile-picture, .testimonial-picture {
   background-color: #ccc;
   background-position: center center;
   background-size: cover;
   border-radius: 999px;
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-picture {
+  width: 350px;
+  height: 350px;
+}
+
+.bike-image {
+  width: 100px;
+  height: 100px;
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+}
+
+.comment-image {
+  width: 50px;
+  height: 50px;
 }
 
 .bike-info-td {
@@ -198,13 +217,7 @@ input {
   }
 }
 
-.profile-picture {
-  width: 200px;
-  height: 200px;
-  background-position: center center;
-  background-size: cover;
-  border-radius: 999px;
-}
+
 
 .profile-info {
   padding-left: @spacing * 2;
@@ -222,9 +235,45 @@ input {
 
 .comments {
   padding-left: @spacing;
+
+  .comment {
+    background: #eee;
+    padding: @spacing;
+    margin-left: @spacing;
+    position: relative;
+
+    &:before {
+      content: "";
+      display: block;
+      top: 0;
+      left: -10px;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 10px 20px 0;
+      border-color: transparent #eee transparent transparent;
+    }
+  }
 }
 
 .icon {
   width: 15px;
   height: 15px;
+}
+
+label {
+  margin-right: @spacing;
+  user-select: none;
+}
+
+.testimonial-quote {
+  padding: @spacing * 4;
+  font-size: 26px;
+}
+
+.quote-symbol {
+  font-size: 100px;
+  line-height: 30%;
+  color: @theme-color;
 }

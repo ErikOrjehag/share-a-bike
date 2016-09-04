@@ -9,6 +9,8 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
 
   $scope.bikes = [];
 
+  $scope.comments = [];
+
   $http.get("/api/user/" + loginFactory.getUserId())
     .then(function (response) {
       $scope.user = response.data;
@@ -20,10 +22,8 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
     });
 
   function fetchBorrowing() {
-    console.log("fetch");
     $http.get("/api/bikeBorrowing/" + loginFactory.getUserId())
       .then(function (response) {
-        console.log(response.data);
         if (response.data) {
           $http.get("/api/bike/" + response.data)
             .then(function (response) {
@@ -50,8 +50,8 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
     return bike && bike.moved && bike.locked;
   };
 
-  $scope.return = function () {
-    $http.get("/api/bike/" + $scope.borrowing.id + "/return/" + loginFactory.getUserId())
+  $scope.return = function (bike) {
+    $http.get("/api/bike/" + bike.id + "/return/" + loginFactory.getUserId())
       .then(function (result) {
         if (result.data) {
           if (promise) {
@@ -87,5 +87,47 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
       "background-image": "url(\"" + bike.image_url + "\")"
     };
   };
+
+  $scope.find = function (bike) {
+    $http.get("/api/bike/" + bike.id + "/find")
+      .then(function (response) {
+        console.log(response);
+      }, function (error) {
+        console.log(error);
+      });
+  };
+
+  $scope.lock = function (bike) {
+    $http.get("/api/bike/" + bike.id + "/lock")
+      .then(function (response) {
+        console.log(response);
+        if (promise) {
+          $timeout.cancel(promise);
+        }
+        fetchBorrowing();
+      }, function (error) {
+        console.log(error);
+      });
+  };
+
+  $scope.unlock = function (bike) {
+    $http.get("/api/bike/" + bike.id + "/unlock")
+      .then(function (response) {
+        console.log(response);
+        if (promise) {
+          $timeout.cancel(promise);
+        }
+        fetchBorrowing();
+      }, function (error) {
+        console.log(error);
+      });
+  };
+
+  $http.get("/api/user/" + loginFactory.getUserId() + "/comments")
+    .then(function (response) {
+      $scope.comments = response.data;
+    }, function (error) {
+      console.log(errors);
+    });
 
 });

@@ -1,5 +1,5 @@
 
-app.directive('bikeMap', function($filter){
+app.directive('bikeMap', function($filter, $http){
 
   return {
 
@@ -7,7 +7,9 @@ app.directive('bikeMap', function($filter){
     replace: true,
     scope: {
       bikes: "=bikeMapBikes",
-      showPaths: "=bikeMapShowPaths"
+      showPaths: "=bikeMapShowPaths",
+      showPoints: "=bikeMapShowPoints",
+      checkboxes: "=bikeMapCheckboxes"
     },
     template: '<div></div>',
 
@@ -16,15 +18,17 @@ app.directive('bikeMap', function($filter){
       // Create leaflet map.
       scope.map = L.map(element[0], {
         center: [58.39404312677626, 15.561318397521973],
-        zoom: 17,
+        zoom: 10,
         zoomControl: false,
         attributionControl: false,
-        minZoom: 2,
+        minZoom: 10,
         maxZoom: 18
       });
 
       // Add tiles to the map
       scope.map.addLayer(L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png'));
+
+      //scope.map.addControl(new L.Control.ZoomLevelList());
 
       /*scope.map.on("move", function (e) {
         console.log(scope.map.getCenter(), scope.map.getZoom());
@@ -32,6 +36,8 @@ app.directive('bikeMap', function($filter){
     },
 
     controller: function ($scope) {
+
+      $scope.hasSetBounds = false;
 
       $scope.$watch('bikes', function (newValue, oldValue) {
 
@@ -68,11 +74,92 @@ app.directive('bikeMap', function($filter){
 
           $scope.bikeLayer = L.featureGroup(features);
 
-          console.log($scope.bikeLayer.getBounds());
-
-          $scope.map.addLayer($scope.bikeLayer);
+          if (features.length) {
+            if (!$scope.hasSetBounds) {
+              $scope.hasSetBounds = true;
+              $scope.map.fitBounds($scope.bikeLayer.getBounds(), { maxZoom: 16, padding: [1, 1] });
+            }
+            $scope.map.addLayer($scope.bikeLayer);
+          }
         }
       });
+
+      if ($scope.showPoints) {
+        $http.get("/api/points")
+          .then(function (response) {
+            $scope.points = response.data;
+            showPoints();
+          }, function (error) {
+            console.log(error);
+          });
+
+        $scope.$watch('checkboxes', showPoints, true);
+      }
+
+      console.log($scope.checkboxes);
+
+      function showPoints () {
+
+        console.log("showPoints");
+
+        if (!$scope.points) {
+          return;
+        }
+
+        var features = [];
+
+        if ($scope.checkboxes.pumps) {
+          $scope.points.pumps.forEach(function (pump) {
+            features.push(L.marker([pump[1], pump[0]], {
+              icon: L.icon({
+                iconUrl: "/images/icons/pump.png",
+                iconSize: [20, 20]
+              })
+            }));
+          });
+        }
+
+        if ($scope.checkboxes.parking) {
+          $scope.points.parking.forEach(function (pump) {
+            features.push(L.marker([pump[1], pump[0]], {
+              icon: L.icon({
+                iconUrl: "/images/icons/parking2.png",
+                iconSize: [20, 20]
+              })
+            }));
+          });
+        }
+
+        if ($scope.checkboxes.turistinfo) {
+          $scope.points.turistinfo.forEach(function (pump) {
+            features.push(L.marker([pump[1], pump[0]], {
+              icon: L.icon({
+                iconUrl: "/images/icons/information.png",
+                iconSize: [20, 20]
+              })
+            }));
+          });
+        }
+
+        if ($scope.checkboxes.museum) {
+          $scope.points.museum.forEach(function (pump) {
+            features.push(L.marker([pump[1], pump[0]], {
+              icon: L.icon({
+                iconUrl: "/images/icons/theater.png",
+                iconSize: [20, 20]
+              })
+            }));
+          });
+        }
+
+        if ($scope.pointsLayer) {
+          $scope.map.removeLayer($scope.pointsLayer);
+        }
+
+        $scope.pointsLayer = L.featureGroup(features);
+
+        $scope.map.addLayer($scope.pointsLayer);
+      }
     }
   };
 

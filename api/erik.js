@@ -102,3 +102,18 @@ router.get("/bikeBorrowing/:userId", function (req, res) {
     });
   })
 });
+
+router.get("/user/:userId/comments", function (req, res) {
+  pool.connect(function (error, client, done) {
+    if (error) return console.log(error);
+
+    client.query('SELECT text, users.full_name, users.image_url FROM user_comments LEFT JOIN users ON user_comments.from_user = users.id WHERE to_user = $1', [req.params.userId], function (error, result) {
+      done();
+
+      if (error) return console.log(error);
+
+      res.json(result.rows);
+    });
+  })
+});
+

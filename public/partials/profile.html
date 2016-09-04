@@ -16,7 +16,19 @@
     </div>
     <div class="right-column">
       <div class="comments">
-        Comments...
+        <table>
+          <tr ng-repeat="comment in comments | limitTo:3">
+            <td style="width: 1px; vertical-align: top;">
+              <div class="comment-image" ng-style="{ 'background-image': 'url({{ comment.image_url }})' }"></div>
+            </td>
+            <td style="vertical-align: top;">
+              <div class="comment">
+                <div>{{ comment.full_name }}</div>
+                <div>{{ comment.text }}</div>
+              </div>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
     <div class="clear"></div>
@@ -27,7 +39,7 @@
       <h2>You are borrowing this bike</h2>
       <div>
         <div class="left-column">
-          <div bike-map bike-map-bikes="borrowingList" bike-map-show-paths="true" class="borrow-map"></div>
+          <div bike-map bike-map-bikes="borrowingList" bike-map-show-paths="true" bike-map-show-points="false" class="borrow-map"></div>
         </div>
         <div class="right-column">
           <table style="width: 100%;">
@@ -39,9 +51,9 @@
                 <div class="bike-name">{{ borrowing.bike_name }}</div>
                 <div>
                   <span>Status: </span>
-                  <span ng-show="!stolen(borrowed) && borrowed.locked">Locked <img class="icon" src="/images/locked.png"></span>
-                  <span ng-show="!stolen(borrowed) && !borrowed.locked">Unlocked <img class="icon" src="/images/unlocked.png"></span>
-                  <span ng-show="stolen(borrowed)">Stolen!</span>
+                  <span ng-show="!stolen(borrowing) && borrowing.locked">Locked <img class="icon" src="/images/locked.png"></span>
+                  <span ng-show="!stolen(borrowing) && !borrowing.locked">Unlocked <img class="icon" src="/images/unlocked.png"></span>
+                  <span ng-show="stolen(borrowing)">Stolen!</span>
                 </div>
                 <div style="font-style: italic">
                   Owner: {{ borrowing.full_name }}
@@ -53,7 +65,10 @@
             </tr>
           </table>
           <br>
-          <div class="button" ng-click="return()">Return</div>
+          <div class="button" ng-click="return(borrowing)">Return</div>
+          <div class="button" ng-click="find(borrowing)">Find</div>
+          <div class="button" ng-click="lock(borrowing)" ng-show="!borrowing.locked">Lock</div>
+          <div class="button" ng-click="unlock(borrowing)" ng-show="borrowing.locked">Unlock</div>
         </div>
         <div class="clear"></div>
       </div>
@@ -64,7 +79,7 @@
     <h2>You own these bikes</h2>
     <div>
       <div class="left-column">
-        <div class="borrow-map" bike-map bike-map-bikes="bikes" bike-map-show-paths="true"></div>
+        <div class="borrow-map" bike-map bike-map-bikes="bikes" bike-map-show-paths="true" bike-map-show-points="false"></div>
       </div>
       <div class="right-column">
         <div class="bike-list">
