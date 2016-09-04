@@ -9,6 +9,31 @@ Tre saker som den ska låta och blinka på:
 3. När man försöker hitta sin cykel när man är i närheten ska den låta högt, men inte illa. Den får gärna blinka lite vackra färger också så man hittar cykeln i mörkret. 
 
 
+## Till Erik & William
+
+1. Visualisera öppen data anrop
+2. Implemtera Find-My-Bike knapp
+3. Knapp för att låsa och låsa upp cykel som är hyrd
+
+
+## Till Erik
+
+1. Visa kommentarer
+
+
+## Till William
+
+1. Push notifiering, eller nått sätt att visa om din egen cykel blivit stulen
+2. Skicka GPS koordinater för var du befinner dig. 
+
+
+## Till Fredrik 
+
+1. Fixa in vägarbeten (med regexp)
+2. Låsa upp cykel när man är i närheten. 
+3. Låsa cykel när man går bort från den
+4. Fixa pitch och förbereda sånt.
+5. Samla in mer data för fler cyklar. 
 
 
 
