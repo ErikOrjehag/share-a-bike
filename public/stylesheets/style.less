@@ -277,3 +277,20 @@ label {
   line-height: 30%;
   color: @theme-color;
 }
+
+.stolen {
+  animation-name: red-flash;
+  animation-duration: 200ms;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+/* Standard syntax */
+@keyframes red-flash {
+  from {
+    background-color: #f66;
+  }
+  to {
+    background-color: transparent;
+  }
+}

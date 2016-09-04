@@ -42,7 +42,7 @@
           <div bike-map bike-map-bikes="borrowingList" bike-map-show-paths="true" bike-map-show-points="false" class="borrow-map"></div>
         </div>
         <div class="right-column">
-          <table style="width: 100%;">
+          <table style="width: 100%;" ng-class="{ 'stolen': stolen(borrowing) }">
             <tr>
               <td style="width: 1px;">
                 <div class="bike-image" ng-style="image(borrowing)"></div>
@@ -53,7 +53,7 @@
                   <span>Status: </span>
                   <span ng-show="!stolen(borrowing) && borrowing.locked">Locked <img class="icon" src="/images/locked.png"></span>
                   <span ng-show="!stolen(borrowing) && !borrowing.locked">Unlocked <img class="icon" src="/images/unlocked.png"></span>
-                  <span ng-show="stolen(borrowing)">Stolen!</span>
+                  <span ng-show="stolen(borrowing)" style="font-weight: bold;">Stolen!</span>
                 </div>
                 <div style="font-style: italic">
                   Owner: {{ borrowing.full_name }}
@@ -84,7 +84,7 @@
       <div class="right-column">
         <div class="bike-list">
           <div class="bike-list-row" ng-repeat="bike in bikes">
-            <table style="width: 100%;">
+            <table style="width: 100%;" ng-class="{ 'stolen': stolen(bike) }">
               <tr>
                 <td style="width: 1px;">
                   <div class="bike-image" ng-style="image(bike)"></div>

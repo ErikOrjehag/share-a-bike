@@ -10,28 +10,28 @@ particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '8
     //console.log('Device variable retrieved successfully:', data);
     console.log(data);
     pool.connect(function(error, client, done) {
-      if (error) return console.log(error);
+      if (error) return console.log("1: ", error);
 	if(data.body.result){
           client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT("+data.data.replace(',',' ')+")", data.coreid], function(error, result) {
           done();
-          if (error) return console.log(error);
+          if (error) return console.log("2: ", error);
           console.log("Saved: " + data.data);
         });
       }
       client.query("UPDATE bikes SET online = $1 WHERE electron_id = $2", [data.body.coreInfo.connected, data.body.coreInfo.deviceID], function(error, result) {
         done();
-        if (error) return console.log(error);
-        console.log(data.body.coreInfo.connected?"Bike is online":"Bike is offline");
+        if (error) return console.log("3: ", error);
+        console.log(data.body.coreInfo.connected?"Bike is online 1":"Bike is offline 1");
       });
     });
 }, function(err) {
     //console.log('An error occurred while getting attrs:', err);
     pool.connect(function(error, client, done) {
-      if (error) return console.log(error);
+      if (error) return console.log("4: ", error);
       client.query("UPDATE bikes SET online = false WHERE electron_id = '49003c001951343334363036'", [], function(error, result) {
         done();
-        if (error) return console.log(error);
-        console.log("Bike is offline");
+        if (error) return console.log("5: ", error);
+        console.log("Bike is offline 2");
       });
     });
 });
@@ -41,10 +41,17 @@ particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '8
 particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'G', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
   stream.on('event', function(data) {
     pool.connect(function(error, client, done) {
-      if (error) return console.log(error);
+      if (error) return console.log("6: ", error);
+
+        var coords = data.data.split(',');
+        if(coord[0] > 58.44 || coord[0] < 58.37 || coord[1] < 15.5 || coord[1] > 15.7){
+          console.log("!! Suspicious coordinate disregarded.", coord);
+          return;
+        }
+
         client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT("+data.data.replace(',',' ')+")", data.coreid], function(error, result) {
         done();
-        if (error) return console.log(error);
+        if (error) return console.log("7: ", error);
         console.log("Saved: " + data.data);
       });
     });
@@ -57,11 +64,11 @@ particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'M', auth:
   stream.on('event', function(data) {
     console.log("M recieved");
     pool.connect(function(error, client, done) {
-      if (error) return console.log(error);
+      if (error) return console.log("8: ", error);
 
       client.query("UPDATE bikes SET moved=$1 WHERE electron_id = $2", [data.data == "1", data.coreid], function(error, result) {
         done();
-        if (error) return console.log(error);
+        if (error) return console.log("9: ", error);
         console.log((data.data == "1")?"Bicycle is moving":"Bicycling is not moving");
       });
     });
@@ -69,15 +76,36 @@ particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'M', auth:
 });
 
 
+
+
+// Get locked with events
+particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'L', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
+  stream.on('event', function(data) {
+    console.log("L recieved");
+    pool.connect(function(error, client, done) {
+      if (error) return console.log("8: ", error);
+
+      client.query("UPDATE bikes SET locked=$1 WHERE electron_id = $2", [data.data == "1", data.coreid], function(error, result) {
+        done();
+        if (error) return console.log("10: ", error);
+        console.log((data.data == "1")?"Bicycle is locked":"Bicycling is not locked");
+      });
+    });
+  });
+});
+
+
+
+
 // Get button with events
 particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'B', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
   stream.on('event', function(data) {
     console.log("Button pressed");
     /*pool.connect(function(error, client, done) {
-      if (error) return console.log(error);
+      if (error) return console.log("10: ", error);
       client.query("UPDATE bikes SET locked = NOT locked WHERE electron_id = $1", [data.coreid], function(error, result) {
         done();
-        if (error) return console.log(error);
+        if (error) return console.log("11: ", error);
       });
 
     });*/

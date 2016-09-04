@@ -2,7 +2,7 @@
 app.controller("findCtrl", function ($scope, $http, $timeout, $location, loginFactory) {
 
   $scope.bikes = [];
-  var pollTime = 1000;
+  var pollTime = 3000;
   var promise = null;
 
   $scope.checkboxes = {

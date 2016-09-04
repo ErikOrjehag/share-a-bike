@@ -5,7 +5,7 @@ app.controller("profileCtrl", function ($scope, $http, loginFactory, $timeout) {
   $scope.borrowing = false;
   $scope.borrowingList = [];
   var promise;
-  var polltime = 1000;
+  var polltime = 3000;
 
   $scope.bikes = [];
 
