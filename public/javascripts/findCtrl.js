@@ -88,4 +88,8 @@ app.controller("findCtrl", function ($scope, $http, $timeout, $location, loginFa
       });
   };
 
+  $scope.stolen = function (bike) {
+    return bike && bike.moved && bike.locked;
+  };
+
 });

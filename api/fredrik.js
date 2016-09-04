@@ -13,11 +13,13 @@ router.get("/bike/:id/rent/:user", function (req, res) {
 
   pool.connect(function(error, client, done) {
     if (error) return console.log(error);
+
     client.query('SELECT rented_by FROM bikes WHERE id = $1', [bike_id], function(error, result) {
-      done();
+
       if (error) return console.log(error);
       
       if(result.rows[0].rented_by !== null){
+        done();
         console.log("User #" +user_id+ " can't rent a bike that is already rent by user #" + result.rows[0].rented_by);
         res.json(false);
       } else {
@@ -39,10 +41,10 @@ router.get("/bike/:id/return/:user", function (req, res) {
   pool.connect(function(error, client, done) {
     if (error) return console.log(error);
     client.query('SELECT rented_by FROM bikes WHERE id = $1', [bike_id], function(error, result) {
-      done();
       if (error) return console.log(error);
       
       if(result.rows[0].rented_by != user_id){
+        done();
         console.log("User #"+user_id+" can't return a bike that was rented by user #" + result.rows[0].rented_by);
         res.json(false);
       } else {
@@ -85,7 +87,7 @@ function lock(bikeId, callback){
         console.log('Bicycle locked succesfully:', data);
         res.json(true);
       }, function(err) {
-        saveLockStatus(coreid, false)
+        saveLockStatus(coreid, false);
         console.log('Bicycle not locked. An error occurred:', err);
         res.json(false);
       });
@@ -107,7 +109,7 @@ function unlock(bikeId, callback){
         console.log('Bicycle unlocked succesfully:', data);
         callback(true);
       }, function(err) {
-        saveLockStatus(coreid, true)
+        saveLockStatus(coreid, true);
         console.log('Bicycle not unlocked. An error occurred:', err);
         callback(false);
       });
@@ -160,7 +162,7 @@ router.get("/user/:id/report/:pos", function (req, res) {
       // Should the bike get locked or unlocked? Where is the bike that this user have borrowed?
       client.query("SELECT ST_Distance(pos,ST_GeomFromText($1::text)) as distance, bike_id FROM bike_positions WHERE bike_id = (SELECT id FROM bikes WHERE rented_by = $2) ORDER BY ts DESC LIMIT 1", ["POINT("+req.params.pos.replace(',',' ')+")", req.params.id], function(error, result) {
         done();
-        if (error) {return console.log(error);};
+        if (error) {return console.log(error);}
         if(result.rows.length == 0){
           console.log("User #" + req.params.id + " doesn't rent any bikes currently");
           return;

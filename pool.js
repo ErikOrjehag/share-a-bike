@@ -6,7 +6,7 @@ var config = {
   password: '123',
   host: 'localhost',
   port: 5432,
-  max: 10,
+  max: 30,
   idleTimeoutMillis: 30000
 };
 

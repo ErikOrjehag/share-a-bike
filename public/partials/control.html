@@ -1,0 +1,9 @@
+<div class="center">
+  <div class="page">
+    <div>User id: {{ user_id }}</div>
+    <div>Moving: {{ borrowing.moving ? "true" : "false" }}</div>
+    <div>Locked: {{ borrowing.locked ? "true" : "false" }}</div><br>
+    <div class="button" ng-click="lock(borrowing)" ng-show="!borrowing.locked">Lock</div>
+    <div class="button" ng-click="unlock(borrowing)" ng-show="borrowing.locked">Unlock</div>
+  </div>
+</div>

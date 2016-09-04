@@ -11,19 +11,23 @@ particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '8
     console.log(data);
     pool.connect(function(error, client, done) {
       if (error) return console.log("1: ", error);
-	if(data.body.result){
-          client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT("+data.data.replace(',',' ')+")", data.coreid], function(error, result) {
+      if (data.body.result) {
+        client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT(" + data.data.replace(',', ' ') + ")", data.coreid], function (error, result) {
           done();
           if (error) return console.log("2: ", error);
           console.log("Saved: " + data.data);
         });
       }
+    });
+
+    pool.connect(function (error, client, done) {
       client.query("UPDATE bikes SET online = $1 WHERE electron_id = $2", [data.body.coreInfo.connected, data.body.coreInfo.deviceID], function(error, result) {
         done();
         if (error) return console.log("3: ", error);
         console.log(data.body.coreInfo.connected?"Bike is online 1":"Bike is offline 1");
       });
     });
+
 }, function(err) {
     //console.log('An error occurred while getting attrs:', err);
     pool.connect(function(error, client, done) {
@@ -40,15 +44,15 @@ particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '8
 // Get GPS coords with events
 particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'G', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
   stream.on('event', function(data) {
+
+    var coords = data.data.split(',');
+    if(coord[0] > 58.44 || coord[0] < 58.37 || coord[1] < 15.5 || coord[1] > 15.7){
+      console.log("!! Suspicious coordinate disregarded.", coord);
+      return;
+    }
+
     pool.connect(function(error, client, done) {
       if (error) return console.log("6: ", error);
-
-        var coords = data.data.split(',');
-        if(coord[0] > 58.44 || coord[0] < 58.37 || coord[1] < 15.5 || coord[1] > 15.7){
-          console.log("!! Suspicious coordinate disregarded.", coord);
-          return;
-        }
-
         client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT("+data.data.replace(',',' ')+")", data.coreid], function(error, result) {
         done();
         if (error) return console.log("7: ", error);
