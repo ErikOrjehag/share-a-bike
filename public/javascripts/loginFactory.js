@@ -6,7 +6,7 @@ app.factory("loginFactory", function ($rootScope, $location, $http) {
   fac.login = function (id) {
     sessionStorage.setItem("user_id", id);
     $rootScope.$broadcast("login");
-    $location.path("/find");
+    $location.path("/profile");
   };
 
   fac.logout = function (id) {

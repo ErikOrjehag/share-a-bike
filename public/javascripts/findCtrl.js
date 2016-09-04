@@ -8,7 +8,9 @@ app.controller("findCtrl", function ($scope, $http, $timeout, $location, loginFa
   function fetchBikes() {
     $http.get("/api/bikes")
       .then(function (response) {
-        $scope.bikes = response.data;
+        $scope.bikes = response.data.filter(function (bike) {
+          return bike.owner !== loginFactory.getUserId();
+        });
       }, function (error) {
         console.log(error);
       })

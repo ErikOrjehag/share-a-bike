@@ -1,3 +1,105 @@
 <div class="center">
+  <div class="page">
+    <div class="left-column">
+      <table>
+        <tr>
+          <td style="width: 1px;">
+            <div class="profile-picture" ng-style="profilePictureStyle"></div>
+          </td>
+          <td class="profile-info">
+            <h2>{{ user.full_name }}</h2>
+            <div class="rating">Rating: {{ user.rating }}%</div>
+            <div class="profile-text">{{ user.profile_text }}</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="right-column">
+      <div class="comments">
+        Comments...
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+  <div class="page">
+    <div ng-show="borrowing">
+      <h2>You are borrowing this bike</h2>
+      <div>
+        <div class="left-column">
+          <div bike-map bike-map-bikes="borrowingList" bike-map-show-paths="true" class="borrow-map"></div>
+        </div>
+        <div class="right-column">
+          <table style="width: 100%;">
+            <tr>
+              <td style="width: 1px;">
+                <div class="bike-image" ng-style="image(borrowing)"></div>
+              </td>
+              <td class="bike-info-td">
+                <div class="bike-name">{{ borrowing.bike_name }}</div>
+                <div style="font-style: italic">
+                  Owner: {{ borrowing.full_name }}
+                </div>
+                <div class="rating">
+                  Rating: {{ borrowing.rating }}%
+                </div>
+              </td>
+            </tr>
+          </table>
+          <br>
+          <div class="button" ng-click="return()">Return</div>
+          <br><br>
+          <div>
+            <span>Status: </span>
+            <span ng-show="!stolen(borrowed) && borrowed.locked">Locked</span>
+            <span ng-show="!stolen(borrowed) && !borrowed.locked">Unlocked</span>
+            <span ng-show="stolen(borrowed)">Stolen!</span>
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <h2>You own these bikes</h2>
+    <div>
+      <div class="left-column">
+        <div class="borrow-map" bike-map bike-map-bikes="bikes" bike-map-show-paths="true"></div>
+      </div>
+      <div class="right-column">
+        <div class="bike-list">
+          <div class="bike-list-row" ng-repeat="bike in bikes">
+            <table style="width: 100%;">
+              <tr>
+                <td style="width: 1px;">
+                  <div class="bike-image" ng-style="image(bike)"></div>
+                </td>
+                <td class="bike-info-td">
+                  <div class="bike-name">{{ bike.bike_name }}</div>
+                  <div>
+                    <span>Status: </span>
+                    <span ng-show="!stolen(bike) && bike.locked">Locked</span>
+                    <span ng-show="!stolen(bike) && !bike.locked">Unlocked</span>
+                    <span ng-show="stolen(bike)">Stolen!</span>
+                  </div>
+                  <div class="rating" ng-show="bike.rented_by">
+                    <div>Borrowed by: {{ bike.rented_by_full_name }}</div>
+                    <div>Rating: {{ bike.rented_by_rating }}%</div>
+                  </div>
+                  <div class="rating" ng-show="!bike.rented_by">
+                    Available
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+
+  <div style="height: 100px;"></div>
 
 </div>

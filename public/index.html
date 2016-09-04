@@ -18,16 +18,17 @@
     <script src="javascripts/bikeMap.js"></script>
     <script src="javascripts/findCtrl.js"></script>
     <script src="javascripts/bikeCtrl.js"></script>
+    <script src="javascripts/profileCtrl.js"></script>
   </head>
   <body ng-controller="mainCtrl">
     <menu ng-controller="menuCtrl">
       <div class="center">
         <span class="logo">Share a Bike</span>
-        <div class="button" ng-show="!isLoggedIn">Registrera dig</div>
+        <div class="button" ng-show="!isLoggedIn">Register</div>
         <div class="menu-items" ng-show="isLoggedIn">
-          <a class="menu-item" ng-href="/find">Hitta</a>
+          <a class="menu-item" ng-href="/find">Borrow</a>
           <a class="menu-item" ng-href="/profile">{{ fullName }}</a>
-          <div class="menu-item" ng-click="logout($event)">Logga ut</div>
+          <div class="menu-item" ng-click="logout($event)">Logout</div>
         </div>
         <div class="clear"></div>
       </div>

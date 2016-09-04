@@ -29,7 +29,7 @@ menu {
   margin: 0;
   position: fixed;
   width: 100%;
-  z-index: 100;
+  z-index: 10000;
 
   .button {
     float: right;
@@ -117,7 +117,6 @@ input {
     pointer-events: all !important;
     color: #666;
     background: #ccc;
-    border: 1px solid #bbb;
   }
 }
 
@@ -132,11 +131,18 @@ input {
   }
 }
 
-.find-map {
-  height: 800px;
+.find-map, .borrow-map {
   width: 100%;
   border-radius: @radius;
   box-shadow: 0 2px 1px rgba(0,0,0,0.1);
+}
+
+.find-map {
+  height: 700px;
+}
+
+.borrow-map {
+  height: 400px;
 }
 
 .page {
@@ -154,6 +160,26 @@ input {
   padding: 0 @spacing;
 }
 
+.bike-name {
+  margin-bottom: @spacing;
+}
+
+
+.bike-image {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.bike-info-td {
+  vertical-align: top;
+  padding-left: @spacing;
+}
+
 .bike-list-row {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding: @spacing * 2 0;
@@ -162,25 +188,38 @@ input {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
-  .bike-list-image {
-    width: 100px;
-    height: 100px;
-    background-color: #ccc;
-    background-position: center center;
-    background-size: cover;
-    border-radius: 999px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-  }
 
-  .bike-list-name {
-    margin-bottom: @spacing;
-  }
-
-  .bike-info-td {
+  .bike-list-td {
     padding-left: @spacing * 2;
   }
 
   .button {
     margin-top: -@spacing;
   }
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 999px;
+}
+
+.profile-info {
+  padding-left: @spacing * 2;
+  padding-top: @spacing * 2;
+  vertical-align: top;
+}
+
+.profile-text {
+  padding-top: @spacing * 2;
+}
+
+.rating {
+  font-style: italic;
+}
+
+.comments {
+  padding-left: @spacing;
 }

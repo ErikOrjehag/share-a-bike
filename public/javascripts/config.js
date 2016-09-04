@@ -12,7 +12,8 @@ app.config(function ($routeProvider, $locationProvider) {
       controller: 'findCtrl'
     })
     .when('/profile', {
-      templateUrl: 'partials/profile.html'
+      templateUrl: 'partials/profile.html',
+      controller: 'profileCtrl'
     })
     .when('/user/:id', {
       templateUrl: 'partials/user.html'

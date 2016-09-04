@@ -1,7 +1,7 @@
 <div class="center">
   <div class="page">
     <div class="left-column">
-      <div bike-map bike-map-bikes="bikes" class="find-map"></div>
+      <div bike-map bike-map-bikes="bikes" bike-map-show-paths="false" class="find-map"></div>
       <div class="clear"></div>
     </div>
     <div class="right-column">
@@ -10,19 +10,22 @@
           <table style="width: 100%;">
             <tr>
               <td style="width: 1px;">
-                <div class="bike-list-image" ng-style="{ 'background-image': 'url({{bike.image_url}})' }"></div>
+                <div class="bike-image" ng-style="{ 'background-image': 'url({{bike.image_url}})' }"></div>
               </td>
-              <td class="bike-info-td" valign="top">
-                <div style="float: left;" class="bike-list-name">{{ bike.bike_name }}</div>
+              <td class="bike-info-td">
+                <div style="float: left;" class="bike-name">{{ bike.bike_name }}</div>
                 <div style="float: right">
-                  <span style="color: #aaa;" ng-show="shouldShowNotAvailable(bike)">Upptagen</span>
-                  <div class="button" ng-show="shouldShowRentBike(bike)" ng-click="rent(bike)">Låna</div>
-                  <div class="button gray" ng-show="shouldShowGrayRentBike(bike)" title="Du måste lämna tillbaka din hyra cykel innan du hyr en annan.">Låna</div>
-                  <div class="button" ng-show="shouldShowReturnBike(bike)" ng-click="return(bike)">Lämna tillbaka</div>
+                  <span style="color: #aaa;" ng-show="shouldShowNotAvailable(bike)">Occupied</span>
+                  <div class="button" ng-show="shouldShowRentBike(bike)" ng-click="rent(bike)">Borrow</div>
+                  <div class="button gray" ng-show="shouldShowGrayRentBike(bike)" title="You have to return your bike before you borrow another one.">Borrow</div>
+                  <div class="button" ng-show="shouldShowReturnBike(bike)" ng-click="return(bike)">Return</div>
                 </div>
                 <div class="clear"></div>
                 <div style="font-style: italic">
-                  Ägare: {{ bike.full_name }}
+                  Owner: {{ bike.full_name }}
+                </div>
+                <div class="rating">
+                  Rating: {{ bike.rating }}%
                 </div>
               </td>
             </tr>
