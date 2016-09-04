@@ -4,7 +4,8 @@ var pool = require('../pool');
 var Particle = require('particle-api-js');
 var particle = new Particle();
 var request = require('request');
-
+var proj4 = require('proj4')
+ 
 
 router.get("/bike/:id/rent/:user", function (req, res) {
   var bike_id = req.params.id;
@@ -139,12 +140,45 @@ router.get("/bike/:id/find", function (req, res) {
 
 
 
-router.get("/pois", function (req, res) {
-  request('http://www.google.com', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      console.log(body); // Print the google web page.
-    }
+router.get("/points", function (req, res) {
+  var points = {};
+  getList('http://kartan.linkoping.se/isms/poi?service=wfs&request=getfeature&typename=cykelpumpar&version=1.1.0&', function(list){
+    points.pumps = list;
+    getList('http://kartan.linkoping.se/isms/poi?service=wfs&request=getfeature&typename=cykelparkering&version=1.1.0&', function(list){
+      points.parking=list;
+    getList('http://kartan.linkoping.se/isms/poi?service=wfs&request=getfeature&typename=turistinfo&version=1.1.0&', function(list){
+      points.turistinfo=list;
+    getList('http://kartan.linkoping.se/isms/poi?service=wfs&request=getfeature&typename=museum&version=1.1.0&', function(list){
+      points.museum=list;
+      res.json(points);
+    });
+    });
+    });
   });
-  
 });
 
+
+function getList(url, callback){
+  var list = [];
+  request(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      body.match(/^.+gml:pos.+$/gim).forEach(function(txt){
+	var coord = txt.substring(txt.indexOf(">")+1, txt.indexOf("</gml")).split(" ");
+        var longlat = proj4('+proj=tmerc +lat_0=0 +lon_0=15 +k=1 +x_0=150000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', 'WGS84', [coord[1], coord[0]]);
+        console.log("coord: ", longlat, coord);
+        list.push(longlat);
+      });
+      callback(list);
+    }
+  });
+}
+
+
+
+
+
+
+//  var longlat = proj4('+proj=tmerc +lat_0=0 +lon_0=15 +k=1 +x_0=150000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', 'WGS84', [188851.096109, 6475578.94379]);
+//  console.log("coord: ", longlat);
+//  res.json(false);
+//});
