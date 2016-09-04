@@ -1,5 +1,17 @@
 # Share a bike
 
+## Till Sebbe
+
+Tre saker som den ska låta och blinka på: 
+
+1. När någon har snott den ska den låta högt och blinka tydligt i flera färger. 
+2. När man larmar och larmar av cykeln. Typ som en bil blinkar med varningsblinkers och låter lite blip blip när man larmar. 
+3. När man försöker hitta sin cykel när man är i närheten ska den låta högt, men inte illa. Den får gärna blinka lite vackra färger också så man hittar cykeln i mörkret. 
+
+
+
+
+
 ## Eget API
 
 GET /api/user/:id
