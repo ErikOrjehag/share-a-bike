@@ -33,12 +33,13 @@ Implementera gärna också ett sätt att aktivera larmet från servern. Typ ett 
 ## Till Fredrik 
 
 1. Fixa in vägarbeten (med regexp)
-2. Låsa upp cykel när man är i närheten. 
-3. Låsa cykel när man går bort från den
+2. Låsa upp cykel när man är i närheten. DONE
+3. Låsa cykel när man går bort från den. DONE
 4. Fixa pitch och förbereda sånt.
 5. Samla in mer data för fler cyklar. 
 6. Lyssna på A-event för att veta när larmet gått. 
-
+7. Kolla igenom så att done() anropas på rätt ställen.
+8. Ta bort koordinater som är uppenbart fel.    DONE
 
 ## Eget API
 
