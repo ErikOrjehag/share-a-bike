@@ -43,17 +43,23 @@ particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '8
 
 // Get GPS coords with events
 particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'G', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
+
+  console.log("SETUP STREAM G");
+
   stream.on('event', function(data) {
 
+    console.log("GOT EVENT G");
+
     var coords = data.data.split(',');
-    if(coord[0] > 58.44 || coord[0] < 58.37 || coord[1] < 15.5 || coord[1] > 15.7){
-      console.log("!! Suspicious coordinate disregarded.", coord);
+
+    if(coords[0] > 58.44 || coords[0] < 58.37 || coords[1] < 15.5 || coords[1] > 15.7){
+      console.log("!! Suspicious coordinate disregarded.", coords);
       return;
     }
 
     pool.connect(function(error, client, done) {
       if (error) return console.log("6: ", error);
-        client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT("+data.data.replace(',',' ')+")", data.coreid], function(error, result) {
+      client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT("+data.data.replace(',',' ')+")", data.coreid], function(error, result) {
         done();
         if (error) return console.log("7: ", error);
         console.log("Saved: " + data.data);
