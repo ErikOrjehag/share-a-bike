@@ -82,7 +82,7 @@ function lock(bikeId, callback){
       done();
       if (error) return console.log(error);
       var coreid = result.rows[0].electron_id;
-      particle.callFunction({deviceId: coreid, name: 'L', argument: '1', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9'}).then( function(data) {
+      particle.callFunction({deviceId: coreid, name: 'L', argument: '1', auth: '16bcdfcf9e104f8ac63a581449d13316c4032300'}).then( function(data) {
         saveLockStatus(coreid, true);
         console.log('Bicycle locked succesfully:', data);
         res.json(true);
@@ -104,7 +104,7 @@ function unlock(bikeId, callback){
       done();
       if (error) return console.log("fredrik 8", error);
       var coreid = result.rows[0].electron_id;
-      particle.callFunction({deviceId: coreid, name: 'L', argument: '0', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9'}).then( function(data) {
+      particle.callFunction({deviceId: coreid, name: 'L', argument: '0', auth: '16bcdfcf9e104f8ac63a581449d13316c4032300'}).then( function(data) {
         saveLockStatus(coreid, false);
         console.log('Bicycle unlocked succesfully:', data);
         callback(true);
@@ -138,7 +138,7 @@ router.get("/bike/:id/find", function (req, res) {
       done();
       if (error) return console.log("fredrik 12", error);
       var coreid = result.rows[0].electron_id;
-      particle.callFunction({deviceId: coreid, name: 'F', argument: '', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9'}).then( function(data) {
+      particle.callFunction({deviceId: coreid, name: 'F', argument: '', auth: '16bcdfcf9e104f8ac63a581449d13316c4032300'}).then( function(data) {
         console.log('Bicycle find sent succesfully:', data);
         res.json(true);
       }, function(err) {

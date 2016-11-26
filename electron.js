@@ -6,7 +6,7 @@ var particle = new Particle();
 
 
 // Get initial GPS coord, not using event!
-particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(data) {
+particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '16bcdfcf9e104f8ac63a581449d13316c4032300' }).then(function(data) {
     //console.log('Device variable retrieved successfully:', data);
     console.log(data);
     pool.connect(function(error, client, done) {
@@ -42,7 +42,7 @@ particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '8
 
 
 // Get GPS coords with events
-particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'G', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
+particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'G', auth: '16bcdfcf9e104f8ac63a581449d13316c4032300' }).then(function(stream) {
 
   console.log("SETUP STREAM G");
 
@@ -52,7 +52,7 @@ particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'G', auth:
 
     var coords = data.data.split(',');
 
-    if(coords[0] > 58.44 || coords[0] < 58.37 || coords[1] < 15.5 || coords[1] > 15.7){
+    if(coords[0] > 60.32 || coords[0] < 60.14 || coords[1] < 24.8 || coords[1] > 25.1){
       console.log("!! Suspicious coordinate disregarded.", coords);
       return;
     }
@@ -70,7 +70,7 @@ particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'G', auth:
 
 
 // Get moving with events
-particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'M', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
+particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'M', auth: '16bcdfcf9e104f8ac63a581449d13316c4032300' }).then(function(stream) {
   stream.on('event', function(data) {
     console.log("M recieved");
     pool.connect(function(error, client, done) {
@@ -89,7 +89,7 @@ particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'M', auth:
 
 
 // Get locked with events
-particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'L', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
+particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'L', auth: '16bcdfcf9e104f8ac63a581449d13316c4032300' }).then(function(stream) {
   stream.on('event', function(data) {
     console.log("L recieved");
     pool.connect(function(error, client, done) {
@@ -108,7 +108,7 @@ particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'L', auth:
 
 
 // Get button with events
-particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'B', auth: '8789d99db6ad440dcd00077b1e1c45a6efe07db9' }).then(function(stream) {
+particle.getEventStream({ deviceId: '49003c001951343334363036', name: 'B', auth: '16bcdfcf9e104f8ac63a581449d13316c4032300' }).then(function(stream) {
   stream.on('event', function(data) {
     console.log("Button pressed");
     /*pool.connect(function(error, client, done) {
