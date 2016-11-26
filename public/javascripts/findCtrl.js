@@ -2,6 +2,7 @@
 app.controller("findCtrl", function ($scope, $http, $timeout, $location, loginFactory) {
 
   $scope.bikes = [];
+  $scope.routes = [];
   var pollTime = 3000;
   var promise = null;
 
@@ -90,6 +91,11 @@ app.controller("findCtrl", function ($scope, $http, $timeout, $location, loginFa
 
   $scope.stolen = function (bike) {
     return bike && bike.moved && bike.locked;
+  };
+
+  $scope.onRoutes = function (routes) {
+    console.log(routes);
+    $scope.routes = routes;
   };
 
 });

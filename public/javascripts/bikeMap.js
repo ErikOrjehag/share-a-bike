@@ -7,6 +7,7 @@ app.directive('bikeMap', function($filter, $http){
     replace: true,
     scope: {
       bikes: "=bikeMapBikes",
+      routes: "=bikeMapRoutes",
       showPaths: "=bikeMapShowPaths",
       showPoints: "=bikeMapShowPoints",
       checkboxes: "=bikeMapCheckboxes"
@@ -17,8 +18,8 @@ app.directive('bikeMap', function($filter, $http){
 
       // Create leaflet map.
       scope.map = L.map(element[0], {
-        center: [58.39404312677626, 15.561318397521973],
-        zoom: 10,
+        center: [60.193408, 24.946755],
+        zoom: 14,
         zoomControl: false,
         attributionControl: false,
         minZoom: 10,
@@ -26,13 +27,26 @@ app.directive('bikeMap', function($filter, $http){
       });
 
       // Add tiles to the map
-      scope.map.addLayer(L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png'));
+      scope.map.addLayer(L.tileLayer('http://api.digitransit.fi/map/v1/hsl-map/{z}/{x}/{y}.png', {
+        //tileSize: 256*2
+      }));
 
       //scope.map.addControl(new L.Control.ZoomLevelList());
 
       /*scope.map.on("move", function (e) {
         console.log(scope.map.getCenter(), scope.map.getZoom());
       });*/
+
+      /*$http.get("/api/route")
+        .then(function (response) {
+          response.data.plan.itineraries.forEach(function (it) {
+            it.legs.forEach(function (leg) {
+              L.polyline(leg.legGeometry.points).addTo(scope.map);
+            });
+          });
+        }, function (error) {
+          console.log(error);
+        });*/
     },
 
     controller: function ($scope) {
@@ -78,10 +92,24 @@ app.directive('bikeMap', function($filter, $http){
           if (features.length) {
             if (!$scope.hasSetBounds) {
               $scope.hasSetBounds = true;
-              $scope.map.fitBounds($scope.bikeLayer.getBounds(), { maxZoom: 16, padding: [1, 1] });
+              //$scope.map.fitBounds($scope.bikeLayer.getBounds(), { maxZoom: 16, padding: [1, 1] });
             }
             $scope.map.addLayer($scope.bikeLayer);
           }
+        }
+      });
+
+      $scope.$watch('routes', function (newValue, oldValue) {
+        if ($scope.routesLayer) {
+          $scope.map.removeLayer($scope.routesLayer);
+        }
+
+        if (typeof newValue !== "undefined") {
+          var features = newValue.map(function (route) {
+            return L.polyline(route);
+          });
+          $scope.routesLayer = L.featureGroup(features);
+          $scope.map.addLayer($scope.routesLayer);
         }
       });
 

@@ -6,3 +6,4 @@ var particle = new Particle();
 
 router.use(require("./fredrik"));
 router.use(require("./erik"));
+router.use(require("./route"));

@@ -1,0 +1,44 @@
+<div class="center">
+  <div class="page">
+    <div class="left-column">
+      <div bike-map class="find-map" bike-map-bikes="bikes" bike-map-show-paths="false" bike-map-show-points="true" bike-map-checkboxes="checkboxes"></div>
+      <div style="margin-top: 10px;">
+        <label><input type="checkbox" ng-model="checkboxes.pumps"> Pumps</label>
+        <label><input type="checkbox" ng-model="checkboxes.parking"> Parking</label>
+        <label><input type="checkbox" ng-model="checkboxes.turistinfo"> Tourist sights</label>
+        <label><input type="checkbox" ng-model="checkboxes.museum"> Museums</label>
+      </div>
+      <div class="clear"></div>
+    </div>
+    <div class="right-column">
+      <div class="bike-list">
+        <div class="bike-list-row" ng-repeat="bike in bikes" ng-class="{ 'stolen': stolen(bike) }">
+          <table style="width: 100%;">
+            <tr>
+              <td style="width: 1px;">
+                <div class="bike-image" ng-style="{ 'background-image': 'url({{bike.image_url}})' }"></div>
+              </td>
+              <td class="bike-info-td">
+                <div style="float: left;" class="bike-name">{{ bike.bike_name }}</div>
+                <div style="float: right">
+                  <span style="color: #aaa;" ng-show="shouldShowNotAvailable(bike)">Occupied</span>
+                  <div class="button" ng-show="shouldShowRentBike(bike)" ng-click="rent(bike)">Borrow</div>
+                  <div class="button gray" ng-show="shouldShowGrayRentBike(bike)" title="You have to return your bike before you borrow another one.">Borrow</div>
+                  <div class="button" ng-show="shouldShowReturnBike(bike)" ng-click="return(bike)">Return</div>
+                </div>
+                <div class="clear"></div>
+                <div style="font-style: italic">
+                  Owner: {{ bike.full_name }}
+                </div>
+                <div class="rating">
+                  Rating: {{ bike.rating }}%
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>
