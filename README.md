@@ -81,7 +81,7 @@ User USER rent the bike ID. Return true if success. Otherwise false.
 Ger koordinater till Point of Interests (sammanställt det som finns nedanför)
 
 
-http://138.68.129.101/api/user/1/report/58.394628,15.560919
+http://139.59.191.80/api/user/1/report/58.394628,15.560919
 För att rapportera koordinaten för user 1. Observera formatet på koordinaten. Kommaseparerad och inget mellanslag. 
 
 

@@ -51,7 +51,7 @@ app.directive('bikeMap', function($filter, $http){
             if (!bike.positions) bike.positions =  [{ lat: 58.429816, lon: 15.723542 }];
             return new L.Marker.Label([bike.positions[0].lat, bike.positions[0].lon], {
               icon: new L.Icon.Label({
-                iconUrl: "http://138.68.129.101/images/icons/bicycle-rider.png",
+                iconUrl: "/images/icons/bicycle-rider.png",
                 iconSize: [30, 30],
                 labelText: bike.bike_name,
                 wrapperAnchor: new L.Point(15, 15),
