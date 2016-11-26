@@ -21,6 +21,7 @@
     <script src="javascripts/loginFactory.js"></script>
     <script src="javascripts/mainCtrl.js"></script>
     <script src="javascripts/bikeMap.js"></script>
+    <script src="javascripts/bikeMapOverlay.js"></script>
     <script src="javascripts/findCtrl.js"></script>
     <script src="javascripts/bikeCtrl.js"></script>
     <script src="javascripts/profileCtrl.js"></script>
@@ -32,14 +33,13 @@
         <span class="logo">Share a Bike</span>
         <div class="button" ng-show="!isLoggedIn">Register</div>
         <div class="menu-items" ng-show="isLoggedIn">
-          <a class="menu-item" ng-href="/find">Borrow</a>
+          <a class="menu-item" ng-href="/find">Map</a>
           <a class="menu-item" ng-href="/profile">{{ fullName }}</a>
           <div class="menu-item" ng-click="logout($event)">Logout</div>
         </div>
         <div class="clear"></div>
       </div>
     </menu>
-    <div class="push"></div>
     <div ng-view></div>
   </body>
 </html>
