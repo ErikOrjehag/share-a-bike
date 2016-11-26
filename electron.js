@@ -12,10 +12,10 @@ particle.getVariable({ deviceId: '49003c001951343334363036', name: 'G', auth: '1
     pool.connect(function(error, client, done) {
       if (error) return console.log("1: ", error);
       if (data.body.result) {
-        client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT(" + data.data.replace(',', ' ') + ")", data.coreid], function (error, result) {
+        client.query("INSERT INTO bike_positions (ts, pos, bike_id) VALUES ($1, ST_GeomFromText($2::text), (SELECT id from bikes WHERE electron_id = $3))", [data.published_at, "POINT(" + data.body.result.replace(',', ' ') + ")", data.coreid], function (error, result) {
           done();
           if (error) return console.log("2: ", error);
-          console.log("Saved: " + data.data);
+          console.log("Saved: " + data.body.result);
         });
       }
     });
