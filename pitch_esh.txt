@@ -1,0 +1,64 @@
+30s pitch först, hela idén klar för publiken. 
+
+
+Introduktion, vilka är vi?
+
+<!--Bakgrund, vad är behovet?--> 
+Madrid. Airport. Air-BnB. Bla bla bla. 
+
+We have developed a service where you can share your bike with others. We have developed a hardware GPS tracker that you hide on your bike, a webbplatform and a mobile application. 
+This is the future, a sharing economy, just like Air BnB, WeWork and others. You share your bike when you are not using it and make money from it. 
+
+With the GPS tracker you can always feel safe that you know where your bike are located. 
+
+Our business model is based on two things, first we sell the GPS tracker, secondly we take 5% of all transactions between customers. 
+
+Many cities are investing big money in bicycles for tourists. But these cycles are not used that much and needs service and infrastructure. Our service is more decenteralized and because of that cheaper. 
+
+We are using open data from linköping municipality to show points of interest in the city. For example where you can park your bike and air pumps. One more thing, we are providing the data of the bicycles as open data. Without any connection to specific persons. You can see when and where people are biking the most. 
+
+
+
+Trycka på Find-knappen. 
+
+
+
+
+[1.5 minut har gått]
+Wille kommer in. 
+
+Wille låser cykeln när han går iväg (Erik fejkar att larmet går igång). Fredrik förklarar att den jämför koordinater i appen och cykeln och ger respons med ett pip och blink när den larmar på. 
+
+Fredrik är tjuv och tar cykeln. Larmet startas (Erik fejk-startar larm).
+
+
+
+
+
+
+
+We have already gotten our first customer, Vahid, that shared a bike during the hackathon. [visa hemsida]
+The website and app is up and running! So you can come and talk with us after the presentations if you want to know more. 
+
+
+
+The End
+
+
+
+
+
+
+
+
+
+Vad vi erbjuder
+Låna cyklar av varandra. 
+
+Var kommer öppen data in!?
+We are using open data from the 
+
+
+Vattentät burk.
+ 
+Business model, vi tar 5% av transaktionerna och säljer GPS enheter. 
